@@ -17,29 +17,32 @@ public struct MoodFace: View {
 
     public var body: some View {
         Canvas { context, size in
-            let r = min(size.width, size.height) / 2
-            let c = CGPoint(x: size.width / 2, y: size.height / 2)
+            let radius = min(size.width, size.height) / 2
+            let center = CGPoint(x: size.width / 2, y: size.height / 2)
             context.fill(
-                Path(ellipseIn: CGRect(x: c.x - r, y: c.y - r, width: r * 2, height: r * 2)),
+                Path(
+                    ellipseIn: CGRect(x: center.x - radius, y: center.y - radius, width: radius * 2, height: radius * 2)
+                ),
                 with: .color(Mood.colors[level - 1]))
-            let eyeR = r * 0.09
-            for dx in [-r * 0.32, r * 0.32] {
+            let eyeR = radius * 0.09
+            for dx in [-radius * 0.32, radius * 0.32] {
                 context.fill(
                     Path(
                         ellipseIn: CGRect(
-                            x: c.x + dx - eyeR, y: c.y - r * 0.2 - eyeR, width: eyeR * 2, height: eyeR * 2)),
+                            x: center.x + dx - eyeR, y: center.y - radius * 0.2 - eyeR, width: eyeR * 2,
+                            height: eyeR * 2)),
                     with: .color(LifeOSColor.moodInk))
             }
-            let mouthY = c.y + r * 0.3
-            let half = r * 0.42
-            let bend = CGFloat(level - 3) * r * 0.14
+            let mouthY = center.y + radius * 0.3
+            let half = radius * 0.42
+            let bend = CGFloat(level - 3) * radius * 0.14
             var mouth = Path()
-            mouth.move(to: CGPoint(x: c.x - half, y: mouthY - bend / 2))
+            mouth.move(to: CGPoint(x: center.x - half, y: mouthY - bend / 2))
             mouth.addQuadCurve(
-                to: CGPoint(x: c.x + half, y: mouthY - bend / 2), control: CGPoint(x: c.x, y: mouthY + bend))
+                to: CGPoint(x: center.x + half, y: mouthY - bend / 2), control: CGPoint(x: center.x, y: mouthY + bend))
             context.stroke(
                 mouth, with: .color(LifeOSColor.moodInk),
-                style: StrokeStyle(lineWidth: max(1.5, r * 0.1), lineCap: .round))
+                style: StrokeStyle(lineWidth: max(1.5, radius * 0.1), lineCap: .round))
         }
         .accessibilityHidden(true)
     }

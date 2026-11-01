@@ -27,15 +27,7 @@ public struct EnergyPicker: View {
             Button {
                 selection = level
             } label: {
-                let bars = HStack(alignment: .bottom, spacing: 2) {
-                    ForEach(1...5, id: \.self) { i in
-                        Capsule()
-                            .fill(i <= level ? (isOn ? LifeOSColor.accent : LifeOSColor.text3) : LifeOSColor.border)
-                            .frame(width: 4, height: CGFloat(6 + i * 3))
-                    }
-                }
-                .frame(height: 24, alignment: .bottom)
-                .accessibilityHidden(true)
+                let bars = levelBars(level: level, isOn: isOn)
                 let label = Text(Self.labels[level - 1])
                     .lifeOSText(.caption)
                     .foregroundStyle(isOn ? LifeOSColor.text : LifeOSColor.text2)
@@ -64,5 +56,17 @@ public struct EnergyPicker: View {
             .accessibilityLabel(Self.labels[level - 1])
             .accessibilityAddTraits(isOn ? .isSelected : [])
         }
+    }
+
+    private func levelBars(level: Int, isOn: Bool) -> some View {
+        HStack(alignment: .bottom, spacing: 2) {
+            ForEach(1...5, id: \.self) { i in
+                Capsule()
+                    .fill(i <= level ? (isOn ? LifeOSColor.accent : LifeOSColor.text3) : LifeOSColor.border)
+                    .frame(width: 4, height: CGFloat(6 + i * 3))
+            }
+        }
+        .frame(height: 24, alignment: .bottom)
+        .accessibilityHidden(true)
     }
 }

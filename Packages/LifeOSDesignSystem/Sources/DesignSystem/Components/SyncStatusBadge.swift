@@ -16,7 +16,7 @@ public enum SyncState: Equatable, Sendable {
         switch self {
         case .synced: "Đã đồng bộ"
         case .syncing: "Đang đồng bộ"
-        case .pending(let n): "Chờ đồng bộ · \(n) thay đổi"
+        case .pending(let changes): "Chờ đồng bộ · \(changes) thay đổi"
         case .iCloudSignedOut: "Chưa đăng nhập iCloud · vẫn lưu trong máy"
         case .iCloudFull: "iCloud đã đầy"
         case .needsRecoveryKey: "Cần mã khôi phục"

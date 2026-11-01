@@ -137,6 +137,7 @@ custom_rules:
     name: "SyncEngine chỉ ở CloudSync"
     regex: '\bSyncEngine\b'
     excluded: '.*/(CloudSync|AppFeature)/.*'
+    match_kinds: [identifier, typeidentifier]   # chỉ code, như check-core-imports.sh (TC-SYNC-14); comment được nhắc
     message: "ADR-0016 ranh giới 2."
     severity: error
   no_fetch_all_in_features:

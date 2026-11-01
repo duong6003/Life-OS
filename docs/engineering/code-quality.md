@@ -36,7 +36,7 @@ Các luật này lấy từ `AGENTS.md` và ADR. Nhờ có chúng, agent bị ch
 | `no_shared_singleton` | `static let shared` | Tiêm qua init, ADR-0007 |
 | `no_print` | `print`, `dump` | Dùng Logger, không log nội dung người dùng |
 | `no_user_defaults_for_data` | `UserDefaults.standard` | Dữ liệu nằm trong SQLite (cảnh báo) |
-| `no_sync_engine_outside_cloudsync` | `SyncEngine` ngoài CloudSync/AppFeature | ADR-0016 |
+| `no_sync_engine_outside_cloudsync` | `SyncEngine` trong code (không tính comment) ngoài CloudSync/AppFeature | ADR-0016 |
 | `no_fetch_all_in_features` | `@FetchAll`/`@FetchOne` trong Feature | ADR-0016 |
 | `todo_needs_issue` | `TODO` không kèm `(LOS-xxx)` | Không để việc treo (cảnh báo) |
 

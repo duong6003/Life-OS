@@ -1,0 +1,15 @@
+{
+  "cases": [
+    {
+      "recordName": "6f908ee05ac9cfe90a416f7ff8866db9",
+      "rowId": "0192f3a0-0000-7000-8000-000000000001",
+      "table": "task"
+    },
+    {
+      "recordName": "f04574626ee4e76dc734e1876ddf6be5",
+      "rowId": "09f3545c-8d4a-51cc-a71d-d99049b91630",
+      "table": "journal_entry"
+    }
+  ],
+  "spec": "SPEC-sync §3.3"
+}

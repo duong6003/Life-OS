@@ -1,0 +1,433 @@
+{
+  "cases": [
+    {
+      "expect": {
+        "changed": [
+          "title"
+        ],
+        "conflicts": [],
+        "fields": {
+          "title": {
+            "h": "2026-11-01T07:00:02.000Z-0000-bbbbbbbbbbbbbbbb",
+            "v": "Mua sữa tươi"
+          }
+        }
+      },
+      "local": {
+        "title": {
+          "h": "2026-11-01T07:00:01.000Z-0000-aaaaaaaaaaaaaaaa",
+          "v": "Mua sữa"
+        }
+      },
+      "localDirty": [],
+      "name": "remote newer wins (lww)",
+      "remote": {
+        "title": {
+          "h": "2026-11-01T07:00:02.000Z-0000-bbbbbbbbbbbbbbbb",
+          "v": "Mua sữa tươi"
+        }
+      },
+      "rowId": "0192f3a0-0000-7000-8000-00000000abcd",
+      "table": "task"
+    },
+    {
+      "expect": {
+        "changed": [],
+        "conflicts": [],
+        "fields": {
+          "title": {
+            "h": "2026-11-01T07:00:03.000Z-0000-aaaaaaaaaaaaaaaa",
+            "v": "A"
+          }
+        }
+      },
+      "local": {
+        "title": {
+          "h": "2026-11-01T07:00:03.000Z-0000-aaaaaaaaaaaaaaaa",
+          "v": "A"
+        }
+      },
+      "localDirty": [],
+      "name": "local newer kept (lww)",
+      "remote": {
+        "title": {
+          "h": "2026-11-01T07:00:02.000Z-0000-bbbbbbbbbbbbbbbb",
+          "v": "B"
+        }
+      },
+      "rowId": "0192f3a0-0000-7000-8000-00000000abcd",
+      "table": "task"
+    },
+    {
+      "expect": {
+        "changed": [
+          "due_on"
+        ],
+        "conflicts": [],
+        "fields": {
+          "due_on": {
+            "h": "2026-11-01T07:00:02.000Z-0000-bbbbbbbbbbbbbbbb",
+            "v": "2026-11-02"
+          },
+          "title": {
+            "h": "2026-11-01T07:00:03.000Z-0000-aaaaaaaaaaaaaaaa",
+            "v": "A"
+          }
+        }
+      },
+      "local": {
+        "due_on": {
+          "h": "2026-11-01T07:00:00.000Z-0000-aaaaaaaaaaaaaaaa",
+          "v": null
+        },
+        "title": {
+          "h": "2026-11-01T07:00:03.000Z-0000-aaaaaaaaaaaaaaaa",
+          "v": "A"
+        }
+      },
+      "localDirty": [],
+      "name": "different fields both kept",
+      "remote": {
+        "due_on": {
+          "h": "2026-11-01T07:00:02.000Z-0000-bbbbbbbbbbbbbbbb",
+          "v": "2026-11-02"
+        },
+        "title": {
+          "h": "2026-11-01T07:00:00.000Z-0000-aaaaaaaaaaaaaaaa",
+          "v": "A"
+        }
+      },
+      "rowId": "0192f3a0-0000-7000-8000-00000000abcd",
+      "table": "task"
+    },
+    {
+      "expect": {
+        "changed": [
+          "title"
+        ],
+        "conflicts": [],
+        "fields": {
+          "deleted_at": {
+            "h": "2026-11-01T07:00:01.000Z-0000-aaaaaaaaaaaaaaaa",
+            "v": 1793516401000
+          },
+          "title": {
+            "h": "2026-11-01T07:00:02.000Z-0000-bbbbbbbbbbbbbbbb",
+            "v": "A2"
+          }
+        }
+      },
+      "local": {
+        "deleted_at": {
+          "h": "2026-11-01T07:00:01.000Z-0000-aaaaaaaaaaaaaaaa",
+          "v": 1793516401000
+        },
+        "title": {
+          "h": "2026-11-01T07:00:00.000Z-0000-aaaaaaaaaaaaaaaa",
+          "v": "A"
+        }
+      },
+      "localDirty": [],
+      "name": "delete then edit elsewhere: stays deleted",
+      "remote": {
+        "deleted_at": {
+          "h": "2026-11-01T07:00:00.000Z-0000-aaaaaaaaaaaaaaaa",
+          "v": null
+        },
+        "title": {
+          "h": "2026-11-01T07:00:02.000Z-0000-bbbbbbbbbbbbbbbb",
+          "v": "A2"
+        }
+      },
+      "rowId": "0192f3a0-0000-7000-8000-00000000abcd",
+      "table": "task"
+    },
+    {
+      "expect": {
+        "changed": [
+          "deleted_at"
+        ],
+        "conflicts": [],
+        "fields": {
+          "deleted_at": {
+            "h": "2026-11-01T07:00:02.000Z-0000-bbbbbbbbbbbbbbbb",
+            "v": null
+          }
+        }
+      },
+      "local": {
+        "deleted_at": {
+          "h": "2026-11-01T07:00:01.000Z-0000-aaaaaaaaaaaaaaaa",
+          "v": 1793516400000
+        }
+      },
+      "localDirty": [],
+      "name": "restore beats older delete",
+      "remote": {
+        "deleted_at": {
+          "h": "2026-11-01T07:00:02.000Z-0000-bbbbbbbbbbbbbbbb",
+          "v": null
+        }
+      },
+      "rowId": "0192f3a0-0000-7000-8000-00000000abcd",
+      "table": "task"
+    },
+    {
+      "expect": {
+        "changed": [
+          "deleted_at",
+          "title"
+        ],
+        "conflicts": [],
+        "fields": {
+          "deleted_at": {
+            "h": "2026-11-01T07:00:02.000Z-0000-bbbbbbbbbbbbbbbb",
+            "v": null
+          },
+          "title": {
+            "h": "2026-11-01T07:00:02.000Z-0000-bbbbbbbbbbbbbbbb",
+            "v": "Mới"
+          }
+        }
+      },
+      "local": null,
+      "localDirty": [],
+      "name": "new row from remote",
+      "remote": {
+        "deleted_at": {
+          "h": "2026-11-01T07:00:02.000Z-0000-bbbbbbbbbbbbbbbb",
+          "v": null
+        },
+        "title": {
+          "h": "2026-11-01T07:00:02.000Z-0000-bbbbbbbbbbbbbbbb",
+          "v": "Mới"
+        }
+      },
+      "rowId": "0192f3a0-0000-7000-8000-00000000abcd",
+      "table": "task"
+    },
+    {
+      "expect": {
+        "changed": [],
+        "conflicts": [],
+        "fields": {
+          "title": {
+            "h": "2026-11-01T07:00:01.000Z-0000-aaaaaaaaaaaaaaaa",
+            "v": "A"
+          }
+        }
+      },
+      "local": {
+        "title": {
+          "h": "2026-11-01T07:00:01.000Z-0000-aaaaaaaaaaaaaaaa",
+          "v": "A"
+        }
+      },
+      "localDirty": [],
+      "name": "same change echoed",
+      "remote": {
+        "title": {
+          "h": "2026-11-01T07:00:01.000Z-0000-aaaaaaaaaaaaaaaa",
+          "v": "A"
+        }
+      },
+      "rowId": "0192f3a0-0000-7000-8000-00000000abcd",
+      "table": "task"
+    },
+    {
+      "expect": {
+        "changed": [
+          "body"
+        ],
+        "conflicts": [],
+        "fields": {
+          "body": {
+            "b": "2026-11-01T07:00:01.000Z-0000-aaaaaaaaaaaaaaaa",
+            "h": "2026-11-01T07:00:02.000Z-0000-bbbbbbbbbbbbbbbb",
+            "v": "sáng nay mưa"
+          }
+        }
+      },
+      "local": {
+        "body": {
+          "b": "2026-11-01T07:00:00.000Z-0000-aaaaaaaaaaaaaaaa",
+          "h": "2026-11-01T07:00:01.000Z-0000-aaaaaaaaaaaaaaaa",
+          "v": "sáng nay…"
+        }
+      },
+      "localDirty": [],
+      "name": "journal body, local clean: lww",
+      "remote": {
+        "body": {
+          "b": "2026-11-01T07:00:01.000Z-0000-aaaaaaaaaaaaaaaa",
+          "h": "2026-11-01T07:00:02.000Z-0000-bbbbbbbbbbbbbbbb",
+          "v": "sáng nay mưa"
+        }
+      },
+      "rowId": "0192f3a0-0000-7000-8000-00000000abcd",
+      "table": "journal_entry"
+    },
+    {
+      "expect": {
+        "changed": [
+          "body"
+        ],
+        "conflicts": [
+          {
+            "body": "bản máy A",
+            "entry_id": "0192f3a0-0000-7000-8000-00000000abcd",
+            "id": "0b6e0208-dc12-50c4-8a71-d965c68f79df",
+            "loser_hlc": "2026-11-01T07:00:01.000Z-0000-aaaaaaaaaaaaaaaa"
+          }
+        ],
+        "fields": {
+          "body": {
+            "b": "2026-11-01T07:00:00.000Z-0000-aaaaaaaaaaaaaaaa",
+            "h": "2026-11-01T07:00:02.000Z-0000-bbbbbbbbbbbbbbbb",
+            "v": "bản máy B"
+          }
+        }
+      },
+      "local": {
+        "body": {
+          "b": "2026-11-01T07:00:00.000Z-0000-aaaaaaaaaaaaaaaa",
+          "h": "2026-11-01T07:00:01.000Z-0000-aaaaaaaaaaaaaaaa",
+          "v": "bản máy A"
+        }
+      },
+      "localDirty": [
+        "body"
+      ],
+      "name": "journal body, both edited from same base: keep both (remote wins)",
+      "remote": {
+        "body": {
+          "b": "2026-11-01T07:00:00.000Z-0000-aaaaaaaaaaaaaaaa",
+          "h": "2026-11-01T07:00:02.000Z-0000-bbbbbbbbbbbbbbbb",
+          "v": "bản máy B"
+        }
+      },
+      "rowId": "0192f3a0-0000-7000-8000-00000000abcd",
+      "table": "journal_entry"
+    },
+    {
+      "expect": {
+        "changed": [],
+        "conflicts": [
+          {
+            "body": "bản máy B",
+            "entry_id": "0192f3a0-0000-7000-8000-00000000abcd",
+            "id": "d8fc5d4d-506b-53f8-9d18-21864d22edb5",
+            "loser_hlc": "2026-11-01T07:00:02.000Z-0000-bbbbbbbbbbbbbbbb"
+          }
+        ],
+        "fields": {
+          "body": {
+            "b": "2026-11-01T07:00:00.000Z-0000-aaaaaaaaaaaaaaaa",
+            "h": "2026-11-01T07:00:03.000Z-0000-aaaaaaaaaaaaaaaa",
+            "v": "bản máy A mới"
+          }
+        }
+      },
+      "local": {
+        "body": {
+          "b": "2026-11-01T07:00:00.000Z-0000-aaaaaaaaaaaaaaaa",
+          "h": "2026-11-01T07:00:03.000Z-0000-aaaaaaaaaaaaaaaa",
+          "v": "bản máy A mới"
+        }
+      },
+      "localDirty": [
+        "body"
+      ],
+      "name": "journal body, both edited: keep both (local wins)",
+      "remote": {
+        "body": {
+          "b": "2026-11-01T07:00:00.000Z-0000-aaaaaaaaaaaaaaaa",
+          "h": "2026-11-01T07:00:02.000Z-0000-bbbbbbbbbbbbbbbb",
+          "v": "bản máy B"
+        }
+      },
+      "rowId": "0192f3a0-0000-7000-8000-00000000abcd",
+      "table": "journal_entry"
+    },
+    {
+      "expect": {
+        "changed": [],
+        "conflicts": [],
+        "fields": {
+          "body": {
+            "b": "2026-11-01T07:00:02.000Z-0000-bbbbbbbbbbbbbbbb",
+            "h": "2026-11-01T07:00:03.000Z-0000-aaaaaaaaaaaaaaaa",
+            "v": "A sửa tiếp"
+          }
+        }
+      },
+      "local": {
+        "body": {
+          "b": "2026-11-01T07:00:02.000Z-0000-bbbbbbbbbbbbbbbb",
+          "h": "2026-11-01T07:00:03.000Z-0000-aaaaaaaaaaaaaaaa",
+          "v": "A sửa tiếp"
+        }
+      },
+      "localDirty": [
+        "body"
+      ],
+      "name": "journal body, remote older than local base: ignore",
+      "remote": {
+        "body": {
+          "b": "2026-11-01T07:00:00.000Z-0000-aaaaaaaaaaaaaaaa",
+          "h": "2026-11-01T07:00:02.000Z-0000-bbbbbbbbbbbbbbbb",
+          "v": "B"
+        }
+      },
+      "rowId": "0192f3a0-0000-7000-8000-00000000abcd",
+      "table": "journal_entry"
+    },
+    {
+      "expect": {
+        "changed": [
+          "mood"
+        ],
+        "conflicts": [],
+        "fields": {
+          "body": {
+            "h": "2026-11-01T07:00:00.000Z-0000-aaaaaaaaaaaaaaaa",
+            "v": "x"
+          },
+          "mood": {
+            "h": "2026-11-01T07:00:02.000Z-0000-bbbbbbbbbbbbbbbb",
+            "v": 4
+          }
+        }
+      },
+      "local": {
+        "body": {
+          "h": "2026-11-01T07:00:00.000Z-0000-aaaaaaaaaaaaaaaa",
+          "v": "x"
+        },
+        "mood": {
+          "h": "2026-11-01T07:00:01.000Z-0000-aaaaaaaaaaaaaaaa",
+          "v": 2
+        }
+      },
+      "localDirty": [
+        "body",
+        "mood"
+      ],
+      "name": "journal mood is lww even when dirty",
+      "remote": {
+        "body": {
+          "h": "2026-11-01T07:00:00.000Z-0000-aaaaaaaaaaaaaaaa",
+          "v": "x"
+        },
+        "mood": {
+          "h": "2026-11-01T07:00:02.000Z-0000-bbbbbbbbbbbbbbbb",
+          "v": 4
+        }
+      },
+      "rowId": "0192f3a0-0000-7000-8000-00000000abcd",
+      "table": "journal_entry"
+    }
+  ],
+  "note": "fields: giá trị + nhãn sau hợp nhất; changed: cột lấy từ remote",
+  "spec": "SPEC-sync §6"
+}

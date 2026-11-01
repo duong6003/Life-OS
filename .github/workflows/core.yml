@@ -1,0 +1,35 @@
+name: core
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - uses: actions/setup-node@v4
+        with: { node-version: "22" }
+      - run: pip install cryptography==44.0.0
+      - name: Module boundaries (ADR-0002)
+        run: bash scripts/check-core-imports.sh
+      - name: Schema copy matches schema/
+        run: diff -r schema Packages/LifeOSCore/Sources/Persistence/Migrations/sql
+      - name: Design tokens up to date (ADR-0009)
+        run: python3 -I design/tokens/generate.py --check
+      - name: Test vectors match reference (Python + TypeScript)
+        run: python3 -I reference/run_all.py --check
+      - name: Plan graph valid
+        run: python3 -I scripts/plan_graph.py --check
+
+  core-swift:
+    runs-on: ubuntu-latest
+    container: swift:6.2-noble
+    steps:
+      - uses: actions/checkout@v4
+      - run: apt-get update && apt-get install -y --no-install-recommends libsqlite3-dev
+      - name: Build & test LifeOSCore on Linux
+        working-directory: Packages/LifeOSCore
+        run: swift build && swift test --parallel

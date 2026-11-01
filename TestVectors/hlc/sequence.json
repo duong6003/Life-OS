@@ -1,0 +1,114 @@
+{
+  "initial": {
+    "counter": 0,
+    "millis": 0
+  },
+  "maxDriftMs": 300000,
+  "node": "aaaaaaaaaaaaaaaa",
+  "spec": "SPEC-sync §2.2",
+  "steps": [
+    {
+      "expect": "2026-11-01T07:00:00.000Z-0000-aaaaaaaaaaaaaaaa",
+      "op": "tick",
+      "phys": 1793516400000,
+      "stateAfter": {
+        "counter": 0,
+        "millis": 1793516400000
+      }
+    },
+    {
+      "expect": "2026-11-01T07:00:00.000Z-0001-aaaaaaaaaaaaaaaa",
+      "op": "tick",
+      "phys": 1793516400000,
+      "stateAfter": {
+        "counter": 1,
+        "millis": 1793516400000
+      }
+    },
+    {
+      "expect": "2026-11-01T07:00:00.000Z-0002-aaaaaaaaaaaaaaaa",
+      "op": "tick",
+      "phys": 1793516395000,
+      "stateAfter": {
+        "counter": 2,
+        "millis": 1793516400000
+      }
+    },
+    {
+      "expectWarning": null,
+      "op": "receive",
+      "phys": 1793516400010,
+      "remote": "2026-11-01T07:00:00.050Z-0003-bbbbbbbbbbbbbbbb",
+      "stateAfter": {
+        "counter": 4,
+        "millis": 1793516400050
+      }
+    },
+    {
+      "expect": "2026-11-01T07:00:00.050Z-0005-aaaaaaaaaaaaaaaa",
+      "op": "tick",
+      "phys": 1793516400020,
+      "stateAfter": {
+        "counter": 5,
+        "millis": 1793516400050
+      }
+    },
+    {
+      "expectWarning": null,
+      "op": "receive",
+      "phys": 1793516400100,
+      "remote": "2026-11-01T07:00:00.100Z-0007-bbbbbbbbbbbbbbbb",
+      "stateAfter": {
+        "counter": 8,
+        "millis": 1793516400100
+      }
+    },
+    {
+      "expect": "2026-11-01T07:00:00.200Z-0000-aaaaaaaaaaaaaaaa",
+      "op": "tick",
+      "phys": 1793516400200,
+      "stateAfter": {
+        "counter": 0,
+        "millis": 1793516400200
+      }
+    },
+    {
+      "expectWarning": "ClockDrift",
+      "op": "receive",
+      "phys": 1793516400300,
+      "remote": "2026-11-01T07:06:40.300Z-0000-bbbbbbbbbbbbbbbb",
+      "stateAfter": {
+        "counter": 0,
+        "millis": 1793516400200
+      }
+    },
+    {
+      "expect": "2026-11-01T07:00:00.301Z-0000-aaaaaaaaaaaaaaaa",
+      "op": "tick",
+      "phys": 1793516400301,
+      "stateAfter": {
+        "counter": 0,
+        "millis": 1793516400301
+      }
+    },
+    {
+      "expectWarning": null,
+      "op": "receive",
+      "phys": 1793516400302,
+      "remote": "2026-11-01T07:00:00.001Z-0000-bbbbbbbbbbbbbbbb",
+      "stateAfter": {
+        "counter": 0,
+        "millis": 1793516400302
+      }
+    },
+    {
+      "expect": "2026-11-01T07:00:00.302Z-0001-aaaaaaaaaaaaaaaa",
+      "op": "tick",
+      "phys": 1793516400302,
+      "stateAfter": {
+        "counter": 1,
+        "millis": 1793516400302
+      }
+    }
+  ]
+}

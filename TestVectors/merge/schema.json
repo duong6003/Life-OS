@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "spec": "data-model.md §3",
+  "tables": {
+    "area": {
+      "archived_at": "lww",
+      "color": "lww",
+      "created_at": "lww",
+      "deleted_at": "lww",
+      "icon": "lww",
+      "name": "lww",
+      "sort_key": "lww"
+    },
+    "budget": {
+      "amount": "lww",
+      "category_id": "lww",
+      "created_at": "lww",
+      "deleted_at": "lww",
+      "month": "lww"
+    },
+    "category": {
+      "archived_at": "lww",
+      "color": "lww",
+      "created_at": "lww",
+      "deleted_at": "lww",
+      "icon": "lww",
+      "is_fallback": "lww",
+      "keywords": "lww",
+      "kind": "lww",
+      "name": "lww",
+      "sort_key": "lww"
+    },
+    "habit": {
+      "archived_at": "lww",
+      "color": "lww",
+      "created_at": "lww",
+      "deleted_at": "lww",
+      "goal_id": "lww",
+      "icon": "lww",
+      "name": "lww",
+      "reminder_at": "lww",
+      "sort_key": "lww",
+      "target_count": "lww",
+      "weekdays": "lww"
+    },
+    "habit_log": {
+      "count": "lww",
+      "created_at": "lww",
+      "day": "lww",
+      "deleted_at": "lww",
+      "habit_id": "lww",
+      "status": "lww"
+    },
+    "journal_conflict": {
+      "body_sealed": "lww",
+      "created_at": "lww",
+      "deleted_at": "lww",
+      "entry_id": "lww",
+      "loser_hlc": "lww"
+    },
+    "journal_entry": {
+      "body": "keepBoth",
+      "created_at": "lww",
+      "day": "lww",
+      "deleted_at": "lww",
+      "energy": "lww",
+      "mood": "lww"
+    },
+    "setting": {
+      "created_at": "lww",
+      "deleted_at": "lww",
+      "key": "lww",
+      "value": "lww"
+    },
+    "task": {
+      "area_id": "lww",
+      "completed_at": "lww",
+      "created_at": "lww",
+      "deleted_at": "lww",
+      "due_on": "lww",
+      "goal_id": "lww",
+      "inbox": "lww",
+      "notes": "lww",
+      "priority": "lww",
+      "project_id": "lww",
+      "sort_key": "lww",
+      "source": "lww",
+      "status": "lww",
+      "title": "lww"
+    },
+    "txn": {
+      "amount": "lww",
+      "category_id": "lww",
+      "created_at": "lww",
+      "currency": "lww",
+      "deleted_at": "lww",
+      "goal_id": "lww",
+      "kind": "lww",
+      "note": "lww",
+      "occurred_on": "lww",
+      "project_id": "lww",
+      "recurring_id": "lww",
+      "source": "lww"
+    },
+    "weekly_review": {
+      "answers": "lww",
+      "completed_at": "lww",
+      "created_at": "lww",
+      "deleted_at": "lww",
+      "focus": "lww",
+      "rating": "lww",
+      "week_start": "lww"
+    }
+  }
+}

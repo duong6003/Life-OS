@@ -1,0 +1,30 @@
+{
+  "cases": [
+    {
+      "name": "habit_log:0192f3a0-0000-7000-8000-000000000001:2026-10-30",
+      "uuid": "4599d5ad-0904-5f0f-87f2-442c40ee5054"
+    },
+    {
+      "name": "journal_entry:2026-10-30",
+      "uuid": "09f3545c-8d4a-51cc-a71d-d99049b91630"
+    },
+    {
+      "name": "budget:2026-11:total",
+      "uuid": "18b23795-9e16-5b37-90fe-26081dda19bb"
+    },
+    {
+      "name": "weekly_review:2026-10-26",
+      "uuid": "712a2a12-186b-5f45-802e-cf2d5724a727"
+    },
+    {
+      "name": "setting:theme",
+      "uuid": "de5e3d78-f6c9-575a-872f-5b3eded95f5b"
+    },
+    {
+      "name": "seed:category:expense.food",
+      "uuid": "8aa2a569-53c6-560e-af42-df6b3ed3cd69"
+    }
+  ],
+  "namespace": "6f1c0a52-3c1e-4d55-9b0e-2f7d8a1b9c40",
+  "spec": "SPEC-sync §3.2"
+}

@@ -1,0 +1,27 @@
+{
+  "cases": [
+    {
+      "context": "row|6f908ee05ac9cfe90a416f7ff8866db9",
+      "envelope": "4c4f530152c22e47caf1b82e78156195f522ac1d0101010101010101010101013f03aee507ffed25a5497da53d7240d59a138e80d2028811bd3f693b0c343707b097bc27c09d54d62138acd60d52fffe17b2ef9005c27505268ce555c89c4f717c9e2cbaef8893b525692a5b77fbb95a5047f718c6e2d2b31c9c1592503c80b8c4ee22232dae6620e5db2d2571f2fcdb4846cfed4ad0e42f2072eb66ba9fd9dea87706d93c4ee29957adeb540668b7f5f4f836e892c0687c9292f5db438e2574387d0dbdc3db88fb1f36",
+      "key": "k_row",
+      "nonce": "010101010101010101010101",
+      "plaintextUtf8": "{\"f\":{\"title\":{\"h\":\"2026-11-01T07:00:00.000Z-0000-aaaaaaaaaaaaaaaa\",\"v\":\"Mua sữa\"}},\"id\":\"0192f3a0-0000-7000-8000-000000000001\",\"sv\":1,\"t\":\"task\",\"v\":1}"
+    },
+    {
+      "context": "field|journal_entry|09f3545c-8d4a-51cc-a71d-d99049b91630|body",
+      "envelope": "4c4f530152c22e47caf1b82e78156195f522ac1d0202020202020202020202028076c230665337c6f525ec3dcbed4ce669db71e1707915986b4ebfc73a55aa963f3eda0f905a2d0f455b90018128173787fdbd649d04534aa7ba7512f971431a14469e7a88",
+      "key": "k_field",
+      "nonce": "020202020202020202020202",
+      "plaintextUtf8": "Hôm nay trời mưa, đi bộ 30 phút. Ể Ặ Ỗ."
+    },
+    {
+      "context": "row|empty",
+      "envelope": "4c4f530152c22e47caf1b82e78156195f522ac1d03030303030303030303030307ff2919e05ae24fa636d9e3dedab1ac",
+      "key": "k_row",
+      "nonce": "030303030303030303030303",
+      "plaintextUtf8": ""
+    }
+  ],
+  "kid": "52c22e47caf1b82e78156195f522ac1d",
+  "spec": "SPEC-crypto §4"
+}

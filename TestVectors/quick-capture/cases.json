@@ -1,0 +1,589 @@
+{
+  "spec": "SPEC-quick-capture v1",
+  "source": "design/reference/code/quick-capture.ts",
+  "today": "2026-10-30",
+  "timezone": "local",
+  "categories": [
+    {
+      "id": "food",
+      "name": "Ăn uống",
+      "kind": "expense",
+      "keywords": [
+        "cafe",
+        "cà phê",
+        "phở",
+        "bún",
+        "cơm",
+        "ăn",
+        "trà sữa"
+      ]
+    },
+    {
+      "id": "transport",
+      "name": "Đi lại",
+      "kind": "expense",
+      "keywords": [
+        "grab",
+        "xăng",
+        "taxi",
+        "gửi xe"
+      ]
+    },
+    {
+      "id": "bills",
+      "name": "Hoá đơn",
+      "kind": "expense",
+      "keywords": [
+        "điện",
+        "nước",
+        "internet"
+      ]
+    },
+    {
+      "id": "other-expense",
+      "name": "Khác",
+      "kind": "expense",
+      "keywords": []
+    },
+    {
+      "id": "salary",
+      "name": "Lương",
+      "kind": "income",
+      "keywords": [
+        "lương"
+      ]
+    },
+    {
+      "id": "other-income",
+      "name": "Khác",
+      "kind": "income",
+      "keywords": []
+    }
+  ],
+  "parse": [
+    {
+      "input": "cafe 45k",
+      "expect": {
+        "kind": "expense",
+        "amount": 45000,
+        "note": "cafe",
+        "categoryId": "food",
+        "date": "2026-10-30"
+      },
+      "hint": null
+    },
+    {
+      "input": "Cà phê 45k",
+      "expect": {
+        "kind": "expense",
+        "amount": 45000,
+        "note": "Cà phê",
+        "categoryId": "food",
+        "date": "2026-10-30"
+      },
+      "hint": null
+    },
+    {
+      "input": "phở bò 60.000",
+      "expect": {
+        "kind": "expense",
+        "amount": 60000,
+        "note": "phở bò",
+        "categoryId": "food",
+        "date": "2026-10-30"
+      },
+      "hint": null
+    },
+    {
+      "input": "grab 32k @hôm qua",
+      "expect": {
+        "kind": "expense",
+        "amount": 32000,
+        "note": "grab @hôm qua",
+        "categoryId": "transport",
+        "date": "2026-10-30"
+      },
+      "hint": null
+    },
+    {
+      "input": "+15tr lương",
+      "expect": {
+        "kind": "income",
+        "amount": 15000000,
+        "note": "lương",
+        "categoryId": "salary",
+        "date": "2026-10-30"
+      },
+      "hint": null
+    },
+    {
+      "input": "+15tr",
+      "expect": {
+        "kind": "income",
+        "amount": 15000000,
+        "note": "",
+        "categoryId": "other-income",
+        "date": "2026-10-30"
+      },
+      "hint": null
+    },
+    {
+      "input": "45000 tiền điện",
+      "expect": {
+        "kind": "expense",
+        "amount": 45000,
+        "note": "tiền điện",
+        "categoryId": "bills",
+        "date": "2026-10-30"
+      },
+      "hint": null
+    },
+    {
+      "input": "trà sữa 1,5k",
+      "expect": {
+        "kind": "expense",
+        "amount": 1500,
+        "note": "trà sữa",
+        "categoryId": "food",
+        "date": "2026-10-30"
+      },
+      "hint": null
+    },
+    {
+      "input": "xăng 1tr2",
+      "expect": {
+        "kind": "expense",
+        "amount": 1200000,
+        "note": "xăng",
+        "categoryId": "transport",
+        "date": "2026-10-30"
+      },
+      "hint": null
+    },
+    {
+      "input": "học phí 2tr05 @15/11",
+      "expect": {
+        "kind": "expense",
+        "amount": 2050000,
+        "note": "học phí",
+        "categoryId": "other-expense",
+        "date": "2026-11-15"
+      },
+      "hint": null
+    },
+    {
+      "input": "mua sách 120k @1/10",
+      "expect": {
+        "kind": "expense",
+        "amount": 120000,
+        "note": "mua sách",
+        "categoryId": "other-expense",
+        "date": "2027-10-01"
+      },
+      "hint": null
+    },
+    {
+      "input": "1k5 bánh",
+      "expect": {
+        "kind": "task",
+        "title": "1k5 bánh",
+        "due": null
+      },
+      "hint": null
+    },
+    {
+      "input": "cafe 45",
+      "expect": {
+        "kind": "task",
+        "title": "cafe 45",
+        "due": null
+      },
+      "hint": null
+    },
+    {
+      "input": "cafe 45kk",
+      "expect": {
+        "kind": "task",
+        "title": "cafe 45kk",
+        "due": null
+      },
+      "hint": "Chưa hiểu số tiền. Thử “45k” hoặc “45.000”."
+    },
+    {
+      "input": "nộp báo cáo @mai",
+      "expect": {
+        "kind": "task",
+        "title": "nộp báo cáo",
+        "due": "2026-10-31"
+      },
+      "hint": null
+    },
+    {
+      "input": "nộp báo cáo @nay",
+      "expect": {
+        "kind": "task",
+        "title": "nộp báo cáo",
+        "due": "2026-10-30"
+      },
+      "hint": null
+    },
+    {
+      "input": "gọi mẹ @kia",
+      "expect": {
+        "kind": "task",
+        "title": "gọi mẹ",
+        "due": "2026-11-01"
+      },
+      "hint": null
+    },
+    {
+      "input": "họp nhóm @t2",
+      "expect": {
+        "kind": "task",
+        "title": "họp nhóm",
+        "due": "2026-11-02"
+      },
+      "hint": null
+    },
+    {
+      "input": "đi chợ @t6",
+      "expect": {
+        "kind": "task",
+        "title": "đi chợ",
+        "due": "2026-11-06"
+      },
+      "hint": null
+    },
+    {
+      "input": "dọn nhà @cn",
+      "expect": {
+        "kind": "task",
+        "title": "dọn nhà",
+        "due": "2026-11-01"
+      },
+      "hint": null
+    },
+    {
+      "input": "đi chơi @cuoituan",
+      "expect": {
+        "kind": "task",
+        "title": "đi chơi",
+        "due": "2026-10-31"
+      },
+      "hint": null
+    },
+    {
+      "input": "lên kế hoạch @tuansau",
+      "expect": {
+        "kind": "task",
+        "title": "lên kế hoạch",
+        "due": "2026-11-02"
+      },
+      "hint": null
+    },
+    {
+      "input": "khám răng @15/11",
+      "expect": {
+        "kind": "task",
+        "title": "khám răng",
+        "due": "2026-11-15"
+      },
+      "hint": null
+    },
+    {
+      "input": "trả sách @1/10",
+      "expect": {
+        "kind": "task",
+        "title": "trả sách",
+        "due": "2027-10-01"
+      },
+      "hint": null
+    },
+    {
+      "input": "viết @abc",
+      "expect": {
+        "kind": "task",
+        "title": "viết @abc",
+        "due": null
+      },
+      "hint": null
+    },
+    {
+      "input": "@mai",
+      "expect": null,
+      "hint": null
+    },
+    {
+      "input": "45k",
+      "expect": {
+        "kind": "expense",
+        "amount": 45000,
+        "note": "",
+        "categoryId": "other-expense",
+        "date": "2026-10-30"
+      },
+      "hint": null
+    },
+    {
+      "input": "   ",
+      "expect": null,
+      "hint": null
+    },
+    {
+      "input": "",
+      "expect": null,
+      "hint": null
+    },
+    {
+      "input": "2 triệu tiền nhà",
+      "expect": {
+        "kind": "task",
+        "title": "2 triệu tiền nhà",
+        "due": null
+      },
+      "hint": null
+    },
+    {
+      "input": "mua 2 vé 300k @t7",
+      "expect": {
+        "kind": "expense",
+        "amount": 300000,
+        "note": "mua 2 vé",
+        "categoryId": "other-expense",
+        "date": "2026-10-31"
+      },
+      "hint": null
+    },
+    {
+      "input": "nạp điện thoại 100.000đ",
+      "expect": {
+        "kind": "expense",
+        "amount": 100000,
+        "note": "nạp điện thoại",
+        "categoryId": "bills",
+        "date": "2026-10-30"
+      },
+      "hint": null
+    },
+    {
+      "input": "tiền nước 85.000₫",
+      "expect": {
+        "kind": "expense",
+        "amount": 85000,
+        "note": "tiền nước",
+        "categoryId": "bills",
+        "date": "2026-10-30"
+      },
+      "hint": null
+    },
+    {
+      "input": "thưởng +2tr",
+      "expect": {
+        "kind": "income",
+        "amount": 2000000,
+        "note": "thưởng",
+        "categoryId": "other-income",
+        "date": "2026-10-30"
+      },
+      "hint": null
+    },
+    {
+      "input": "+500k bán đồ cũ",
+      "expect": {
+        "kind": "income",
+        "amount": 500000,
+        "note": "bán đồ cũ",
+        "categoryId": "other-income",
+        "date": "2026-10-30"
+      },
+      "hint": null
+    },
+    {
+      "input": "1.250.000 internet",
+      "expect": {
+        "kind": "expense",
+        "amount": 1250000,
+        "note": "internet",
+        "categoryId": "bills",
+        "date": "2026-10-30"
+      },
+      "hint": null
+    },
+    {
+      "input": "cafe 45k cafe 50k",
+      "expect": {
+        "kind": "expense",
+        "amount": 45000,
+        "note": "cafe cafe 50k",
+        "categoryId": "food",
+        "date": "2026-10-30"
+      },
+      "hint": null
+    },
+    {
+      "input": "a @mai @t2",
+      "expect": {
+        "kind": "task",
+        "title": "a",
+        "due": "2026-11-02"
+      },
+      "hint": null
+    },
+    {
+      "input": "Phở 50K",
+      "expect": {
+        "kind": "expense",
+        "amount": 50000,
+        "note": "Phở",
+        "categoryId": "food",
+        "date": "2026-10-30"
+      },
+      "hint": null
+    },
+    {
+      "input": "ĐI GRAB 20K",
+      "expect": {
+        "kind": "expense",
+        "amount": 20000,
+        "note": "ĐI GRAB",
+        "categoryId": "transport",
+        "date": "2026-10-30"
+      },
+      "hint": null
+    },
+    {
+      "input": "điện 1,2tr",
+      "expect": {
+        "kind": "expense",
+        "amount": 1200000,
+        "note": "điện",
+        "categoryId": "bills",
+        "date": "2026-10-30"
+      },
+      "hint": null
+    },
+    {
+      "input": "đọc 20 trang sách",
+      "expect": {
+        "kind": "task",
+        "title": "đọc 20 trang sách",
+        "due": null
+      },
+      "hint": null
+    },
+    {
+      "input": "chạy 5km",
+      "expect": {
+        "kind": "task",
+        "title": "chạy 5km",
+        "due": null
+      },
+      "hint": "Chưa hiểu số tiền. Thử “45k” hoặc “45.000”."
+    },
+    {
+      "input": "uống 2l nước",
+      "expect": {
+        "kind": "task",
+        "title": "uống 2l nước",
+        "due": null
+      },
+      "hint": "Chưa hiểu số tiền. Thử “45k” hoặc “45.000”."
+    }
+  ],
+  "parseAmount": [
+    {
+      "token": "45k",
+      "expect": 45000
+    },
+    {
+      "token": "45K",
+      "expect": 45000
+    },
+    {
+      "token": "1,5k",
+      "expect": 1500
+    },
+    {
+      "token": "15tr",
+      "expect": 15000000
+    },
+    {
+      "token": "1tr2",
+      "expect": 1200000
+    },
+    {
+      "token": "2tr05",
+      "expect": 2050000
+    },
+    {
+      "token": "1,5tr",
+      "expect": 1500000
+    },
+    {
+      "token": "2m",
+      "expect": 2000000
+    },
+    {
+      "token": "2trieu",
+      "expect": 2000000
+    },
+    {
+      "token": "45.000",
+      "expect": 45000
+    },
+    {
+      "token": "1.250.000",
+      "expect": 1250000
+    },
+    {
+      "token": "45000",
+      "expect": 45000
+    },
+    {
+      "token": "45",
+      "expect": null
+    },
+    {
+      "token": "1k5",
+      "expect": null
+    },
+    {
+      "token": "45.000đ",
+      "expect": 45000
+    },
+    {
+      "token": "45.000₫",
+      "expect": 45000
+    },
+    {
+      "token": "12.34",
+      "expect": null
+    },
+    {
+      "token": "abc",
+      "expect": null
+    }
+  ],
+  "normalize": [
+    {
+      "input": "Phở",
+      "expect": "pho"
+    },
+    {
+      "input": "Đi GRAB",
+      "expect": "di grab"
+    },
+    {
+      "input": "Trà Sữa",
+      "expect": "tra sua"
+    },
+    {
+      "input": "Ể Ặ Ỗ",
+      "expect": "e a o"
+    },
+    {
+      "input": "đường",
+      "expect": "duong"
+    }
+  ]
+}

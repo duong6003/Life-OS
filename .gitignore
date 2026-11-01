@@ -1,0 +1,34 @@
+# Xcode
+DerivedData/
+build/
+*.xcuserstate
+xcuserdata/
+*.xcscmblueprint
+*.moved-aside
+# SwiftPM
+.build/
+.swiftpm/
+Packages/*/.build/
+# Không bỏ Package.resolved: ghim phiên bản là bắt buộc (ADR-0008)
+# macOS
+.DS_Store
+# Python tham chiếu
+__pycache__/
+*.pyc
+.venv/
+# Dữ liệu thử lớn sinh ra lúc đo hiệu năng
+seed/*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+# Bí mật: không bao giờ commit
+*.p8
+*.p12
+*.mobileprovision
+.env
+# Còn lại từ bản Next.js/Supabase cũ trong thư mục này: giữ để không lộ .env.local
+node_modules
+.next
+.env
+.env.local
+*.tsbuildinfo
+next-env.d.ts

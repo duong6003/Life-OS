@@ -1,0 +1,10 @@
+{
+  "sortedAscending": [
+    "2026-11-01T06:59:59.999Z-0009-bbbbbbbbbbbbbbbb",
+    "2026-11-01T07:00:00.000Z-0000-aaaaaaaaaaaaaaaa",
+    "2026-11-01T07:00:00.000Z-0000-bbbbbbbbbbbbbbbb",
+    "2026-11-01T07:00:00.000Z-0001-aaaaaaaaaaaaaaaa",
+    "2026-11-01T07:00:00.001Z-0000-aaaaaaaaaaaaaaaa"
+  ],
+  "spec": "SPEC-sync §2.1"
+}

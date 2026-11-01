@@ -1,0 +1,28 @@
+{
+  "cases": [
+    {
+      "clock": {
+        "counter": 65535,
+        "millis": 1793516400000,
+        "node": "aaaaaaaaaaaaaaaa"
+      },
+      "expectError": "CounterOverflow",
+      "name": "counter overflow on tick",
+      "op": "tick",
+      "phys": 1793516400000
+    },
+    {
+      "clock": {
+        "counter": 0,
+        "millis": 1793516400000,
+        "node": "aaaaaaaaaaaaaaaa"
+      },
+      "expectError": "DuplicateNode",
+      "name": "same node from the future",
+      "op": "receive",
+      "phys": 1793516400000,
+      "remote": "2026-11-01T07:00:00.005Z-0000-aaaaaaaaaaaaaaaa"
+    }
+  ],
+  "spec": "SPEC-sync §2.2–2.3"
+}

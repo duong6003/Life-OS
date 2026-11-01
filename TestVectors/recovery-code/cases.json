@@ -1,0 +1,57 @@
+{
+  "alphabet": "ACDEFGHJKMNPQRTWXY34679",
+  "derive": {
+    "kek": "e8c91ad2122316f1a4f5b221b5bd243d17c191a035f410bd383aa07a6abc107d",
+    "rc": "PDXJ7QTG4NCWYK9RF36PDXJ7ATG4",
+    "rkid": "e859c337ba25c8a1e8dca8f79427a361"
+  },
+  "generate": {
+    "display": "PDXJ 7QTG 4NCW YK9R F36P DXJ7 ATG4",
+    "expect": "PDXJ7QTG4NCWYK9RF36PDXJ7ATG4",
+    "randomBytes": "0b30557a9fc4e90e33587da2c7ec11365b80a5caef14395e83a8cdf2173c6186abd0f51a3f6489aed3f81d42678cb1d6fb20456a8fb4d9fe23486d92b7dc0126"
+  },
+  "keyBundle": {
+    "context": "mkwrap|52c22e47caf1b82e78156195f522ac1d",
+    "mk": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+    "mkid": "52c22e47caf1b82e78156195f522ac1d",
+    "nonce": "090909090909090909090909",
+    "wrapped": "4c4f5301e859c337ba25c8a1e8dca8f79427a36109090909090909090909090946761ea6904e5e8c330a523a239f0be56135ff6be12f0c1c4a1cb402db9261a37c2ddb01ce0cf5aa1160a3baf2c1791b"
+  },
+  "length": 28,
+  "normalize": [
+    {
+      "input": "pdxj 7qtg 4ncw yk9r f36p dxj7 atg4",
+      "invalid": [],
+      "normalized": "PDXJ7QTG4NCWYK9RF36PDXJ7ATG4"
+    },
+    {
+      "input": "k7qp-3mxr 9rta",
+      "invalid": [],
+      "normalized": "K7QP3MXR9RTA"
+    },
+    {
+      "input": "K7QO 3MXR",
+      "invalid": [
+        "O"
+      ],
+      "normalized": "K7QO3MXR"
+    },
+    {
+      "input": "  ",
+      "invalid": [],
+      "normalized": ""
+    },
+    {
+      "input": "ABCD0158",
+      "invalid": [
+        "0",
+        "1",
+        "5",
+        "8",
+        "B"
+      ],
+      "normalized": "ABCD0158"
+    }
+  ],
+  "spec": "SPEC-crypto §3, §6.1"
+}

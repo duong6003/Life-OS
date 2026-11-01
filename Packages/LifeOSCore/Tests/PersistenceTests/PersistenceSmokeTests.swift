@@ -1,0 +1,9 @@
+import Testing
+import TestSupport
+@testable import Persistence
+
+/// Kiểm khung build được và tìm thấy TestVectors. Thay bằng test thật trong các issue LOS-01x/02x.
+@Test func vectorsFolderIsReachable() throws {
+    let data = try VectorLoader.data("merge/schema.json")
+    #expect(!data.isEmpty)
+}

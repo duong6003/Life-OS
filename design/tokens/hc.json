@@ -1,0 +1,30 @@
+{
+ "text-2": {
+  "lightHC": "#55514C",
+  "darkHC": "#B2ACA9"
+ },
+ "text-3": {
+  "lightHC": "#65605B",
+  "darkHC": "#9D9892"
+ },
+ "border": {
+  "lightHC": "#8D8C89",
+  "darkHC": "#6F6D6B"
+ },
+ "accent": {
+  "lightHC": "#0D6760",
+  "darkHC": "#4FD1C5"
+ },
+ "positive": {
+  "lightHC": "#116932",
+  "darkHC": "#4ADE80"
+ },
+ "warning": {
+  "lightHC": "#B25209",
+  "darkHC": "#FBBF24"
+ },
+ "danger": {
+  "lightHC": "#B31B1B",
+  "darkHC": "#F87878"
+ }
+}

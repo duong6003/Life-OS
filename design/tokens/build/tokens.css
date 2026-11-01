@@ -1,0 +1,130 @@
+/* Sinh tự động từ design-tokens/tokens.json. Đừng sửa tay. */
+:root {
+  --bg: #FAF9F7;
+  --surface: #FFFFFF;
+  --surface-2: #F4F2EF;
+  --border: #E7E5E1;
+  --text: #1C1917;
+  --text-2: #57534E;
+  --text-3: #6F6964;
+  --accent: #0F766E;
+  --on-accent: #FFFFFF;
+  --accent-soft: #E6F4F1;
+  --positive: #15803D;
+  --warning: #B45309;
+  --danger: #B91C1C;
+  --scrim: rgba(0, 0, 0, .40);
+  --segment-thumb: var(--surface);
+  --field-on-sheet: var(--surface-2);
+  --data-blue: #4B7CBA;
+  --data-orange: #AC6734;
+  --data-violet: #8A68AE;
+  --data-green: #528A54;
+  --data-pink: #AC5D7E;
+  --data-ochre: #95761A;
+  --data-sky: #1988A3;
+  --data-slate: #6E7B90;
+  --mood-1: #7B80BC;
+  --mood-2: #5F9ABC;
+  --mood-3: #84AFA3;
+  --mood-4: #D4BD67;
+  --mood-5: #E99E5E;
+  --mood-ink: #1C1917;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F0E0D;
+    --surface: #1A1917;
+    --surface-2: #242220;
+    --border: #2E2B28;
+    --text: #F5F5F4;
+    --text-2: #A8A29E;
+    --text-3: #958F89;
+    --accent: #4FD1C5;
+    --on-accent: #04201D;
+    --accent-soft: #11302C;
+    --positive: #4ADE80;
+    --warning: #FBBF24;
+    --danger: #F87171;
+    --scrim: rgba(0, 0, 0, .60);
+    --segment-thumb: var(--border);
+    --field-on-sheet: var(--border);
+    --data-blue: #85B4F1;
+    --data-orange: #E3A072;
+    --data-violet: #C0A1E5;
+    --data-green: #8CC18D;
+    --data-pink: #E496B4;
+    --data-ochre: #CCAE62;
+    --data-sky: #68BFDA;
+    --data-slate: #A5B2C6;
+    --mood-1: #878CC9;
+    --mood-2: #6BA7C9;
+    --mood-3: #90BCAF;
+    --mood-4: #E1CA74;
+    --mood-5: #F6AB6B;
+    --mood-ink: #0F0E0D;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F0E0D;
+  --surface: #1A1917;
+  --surface-2: #242220;
+  --border: #2E2B28;
+  --text: #F5F5F4;
+  --text-2: #A8A29E;
+  --text-3: #958F89;
+  --accent: #4FD1C5;
+  --on-accent: #04201D;
+  --accent-soft: #11302C;
+  --positive: #4ADE80;
+  --warning: #FBBF24;
+  --danger: #F87171;
+  --scrim: rgba(0, 0, 0, .60);
+  --segment-thumb: var(--border);
+  --field-on-sheet: var(--border);
+  --data-blue: #85B4F1;
+  --data-orange: #E3A072;
+  --data-violet: #C0A1E5;
+  --data-green: #8CC18D;
+  --data-pink: #E496B4;
+  --data-ochre: #CCAE62;
+  --data-sky: #68BFDA;
+  --data-slate: #A5B2C6;
+  --mood-1: #878CC9;
+  --mood-2: #6BA7C9;
+  --mood-3: #90BCAF;
+  --mood-4: #E1CA74;
+  --mood-5: #F6AB6B;
+  --mood-ink: #0F0E0D;
+}
+@media (prefers-contrast: more) {
+  :root {
+    --border: #8D8C89;
+    --text-2: #55514C;
+    --text-3: #65605B;
+    --accent: #0D6760;
+    --positive: #116932;
+    --warning: #B25209;
+    --danger: #B31B1B;
+  }
+  :root[data-theme="dark"] {
+    --border: #6F6D6B;
+    --text-2: #B2ACA9;
+    --text-3: #9D9892;
+    --accent: #4FD1C5;
+    --positive: #4ADE80;
+    --warning: #FBBF24;
+    --danger: #F87878;
+  }
+}
+@media (prefers-contrast: more) and (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --border: #6F6D6B;
+    --text-2: #B2ACA9;
+    --text-3: #9D9892;
+    --accent: #4FD1C5;
+    --positive: #4ADE80;
+    --warning: #FBBF24;
+    --danger: #F87878;
+  }
+}

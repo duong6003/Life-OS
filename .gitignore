@@ -1,6 +1,8 @@
 # Xcode
 DerivedData/
 build/
+# token CSS sinh ra: generate.py --check trên CI cần file này
+!design/tokens/build/
 *.xcuserstate
 xcuserdata/
 *.xcscmblueprint

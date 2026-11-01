@@ -12,12 +12,12 @@ public struct LocalDate: Hashable, Comparable, Sendable, CustomStringConvertible
 
     /// Chuỗi lưu trong SQLite và trong RowPayload.
     public var description: String {
-        let y = String(year), m = String(month), d = String(day)
-        return String(repeating: "0", count: max(0, 4 - y.count)) + y + "-"
-            + (m.count < 2 ? "0" + m : m) + "-" + (d.count < 2 ? "0" + d : d)
+        let yearText = String(year), monthText = String(month), dayText = String(day)
+        return String(repeating: "0", count: max(0, 4 - yearText.count)) + yearText + "-"
+            + (monthText.count < 2 ? "0" + monthText : monthText) + "-" + (dayText.count < 2 ? "0" + dayText : dayText)
     }
 
-    public static func < (lhs: LocalDate, rhs: LocalDate) -> Bool {
+    public static func < (lhs: Self, rhs: Self) -> Bool {
         (lhs.year, lhs.month, lhs.day) < (rhs.year, rhs.month, rhs.day)
     }
 }

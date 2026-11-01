@@ -13,21 +13,25 @@ import Testing
             case kRow = "k_row"
         }
     }
-    let v = try VectorLoader.decode(Keys.self, "envelope/keys.json")
-    let p = CryptoKitProvider()
-    let mk = hex(v.mk)
+    let vectors = try VectorLoader.decode(Keys.self, "envelope/keys.json")
+    let provider = CryptoKitProvider()
+    let mk = hex(vectors.mk)
     let salt = [UInt8](repeating: 0, count: 32)
-    #expect(p.hkdfSHA256(ikm: mk, salt: salt, info: Array("lifeos/v1/kid".utf8), outputLength: 16) == hex(v.kid))
-    #expect(p.hkdfSHA256(ikm: mk, salt: salt, info: Array("lifeos/v1/row".utf8), outputLength: 32) == hex(v.kRow))
+    #expect(
+        provider.hkdfSHA256(ikm: mk, salt: salt, info: Array("lifeos/v1/kid".utf8), outputLength: 16)
+            == hex(vectors.kid))
+    #expect(
+        provider.hkdfSHA256(ikm: mk, salt: salt, info: Array("lifeos/v1/row".utf8), outputLength: 32)
+            == hex(vectors.kRow))
 }
 
-private func hex(_ s: String) -> [UInt8] {
+private func hex(_ text: String) -> [UInt8] {
     var out: [UInt8] = []
-    var i = s.startIndex
-    while i < s.endIndex {
-        let j = s.index(i, offsetBy: 2)
-        out.append(UInt8(s[i..<j], radix: 16) ?? 0)
-        i = j
+    var index = text.startIndex
+    while index < text.endIndex {
+        let next = text.index(index, offsetBy: 2)
+        out.append(UInt8(text[index..<next], radix: 16) ?? 0)
+        index = next
     }
     return out
 }

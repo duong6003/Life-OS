@@ -1,7 +1,7 @@
 ---
 id: LOS-050
 title: "CryptoApple: CryptoKitProvider và Keychain"
-milestone: "M1 Lõi dữ liệu cục bộ"
+milestone: "M6 Sau MVP"
 labels: [type:feature, area:crypto, agent-ok]
 depends_on: [LOS-013, LOS-003]
 size: S

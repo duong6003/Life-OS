@@ -4,24 +4,24 @@ Tài liệu này mô tả hệ thống bằng sơ đồ (Mermaid, GitHub hiển 
 
 ## 1. Bối cảnh (C4 mức 1)
 
+> MVP theo ADR-0016: đồng bộ bằng SyncEngine của SQLiteData. Bản có mã hoá đầu-cuối tự làm nằm ở [system-design-post-mvp.md](system-design-post-mvp.md).
+
 ```mermaid
 flowchart LR
   U([Người dùng]) -->|chạm, gõ, ⌘N| APP[Life OS<br/>iPhone · iPad · Mac]
-  APP <-->|payload đã mã hoá<br/>CKSyncEngine| CK[(iCloud private DB<br/>của người dùng)]
-  APP <-->|MK synchronizable| KC[(iCloud Keychain)]
+  APP <-->|bản ghi theo từng hàng<br/>SQLiteData SyncEngine · CKSyncEngine| CK[(iCloud private DB<br/>của người dùng)]
   APP -->|thông báo cục bộ| OS[iOS / macOS<br/>Notification Center]
   APP <-->|đọc chung DB| W["Widget · App Intents<br/>(sau MVP)"]
-  U -.->|giữ mã khôi phục<br/>trên giấy / nơi khác| RK[[Mã khôi phục]]
 ```
 
-Không có máy chủ Life OS. iCloud chỉ thấy ciphertext + vài trường kỹ thuật (`v`, `kid`, recordName ngẫu nhiên).
+Không có máy chủ Life OS. Trong MVP, iCloud lưu dữ liệu dưới dạng bản ghi CloudKit với bảo vệ chuẩn của iCloud. Dữ liệu chỉ được mã hoá đầu-cuối khi người dùng bật Advanced Data Protection (BR-ONB-10).
 
 ## 2. Container và lớp (C4 mức 2)
 
 ```mermaid
 flowchart TB
   subgraph App["App/ (target mỏng)"]
-    MAIN["LifeOSApp @main<br/>tạo AppEnvironment"]
+    MAIN["LifeOSApp @main<br/>prepareDependencies + AppEnvironment"]
   end
   subgraph Features["Packages/LifeOSFeatures"]
     AF[AppFeature<br/>điều hướng, ghép DI]
@@ -39,50 +39,47 @@ flowchart TB
   subgraph DS["Packages/LifeOSDesignSystem"]
     DSY[DesignSystem<br/>token, component]
   end
+  subgraph Data["Packages/LifeOSData (chỉ Apple)"]
+    PER[Persistence<br/>SQLiteData + GRDB, migration, repository, query]
+    CS[CloudSync<br/>SyncEngine, SyncTables, trạng thái]
+  end
   subgraph Platform["Packages/LifeOSPlatform (chỉ Apple)"]
-    CKT[CloudKitTransport<br/>CKSyncEngine]
-    CA[CryptoApple<br/>CryptoKit + Keychain]
     PL[PlatformServices<br/>thông báo, BGTask, Face ID, MetricKit]
   end
   subgraph Core["Packages/LifeOSCore (Swift thuần, Linux)"]
     DOM[Domain<br/>entity, rule, LocalDate]
     CAP[Capture<br/>bộ hiểu Ghi nhanh]
-    SYN[SyncCore<br/>HLC, merge, outbox, SyncTransport]
-    CRY[CryptoCore<br/>envelope, key tree, CryptoProvider]
-    PER[Persistence<br/>GRDB, migration, repository, SyncWriter]
     TS[TestSupport]
   end
   MAIN --> AF
   AF --> TF & TK & HF & JF & SF & RF & CF & OF & STF
   TF & TK & HF & JF & SF & RF & CF & OF & STF --> FS
+  TF & TK & HF & JF & SF & RF & CF & OF & STF --> PER
   FS --> DSY
   FS --> DOM
-  AF --> CKT & CA & PL & PER
-  CKT --> SYN
-  CKT --> CRY
-  CA --> CRY
-  PER --> SYN
+  AF --> CS & PL & PER
+  CS --> PER
   PER --> DOM
-  SYN --> DOM
   CAP --> DOM
   CF --> CAP
   classDef f fill:#eef,stroke:#88a
 ```
 
 Quy tắc mũi tên (bị kiểm bằng build + `scripts/check-core-imports.sh`):
-- `LifeOSCore` không import `SwiftUI`, `UIKit`, `AppKit`, `CloudKit`, `CryptoKit`, `Security`, `os`, `Combine`, `WidgetKit`. Chỉ `Foundation` (bản swift-corelibs) và `GRDB` (chỉ trong `Persistence`).
-- Feature không import feature khác. Feature không import `LifeOSPlatform` (chỉ thấy protocol trong Core/FeatureSupport).
+- `LifeOSCore` không import `SwiftUI`, `UIKit`, `AppKit`, `CloudKit`, `CryptoKit`, `Security`, `os`, `Combine`, `WidgetKit`, `GRDB`, `SQLiteData`. Chỉ dùng `Foundation` (bản swift-corelibs).
+- Feature không import feature khác. Feature không import `LifeOSPlatform`, `CloudSync`, `SQLiteData`; chỉ thấy protocol repository và snapshot trong `Persistence`.
+- `SyncEngine` chỉ xuất hiện trong `CloudSync` và `AppFeature` (TC-SYNC-14).
 - Chỉ `AppFeature` biết cài đặt cụ thể (ghép DI).
+- `SyncCore`, `CryptoCore`, `CryptoApple`, `CloudKitTransport` vẫn nằm trong repo nhưng chưa được nối vào app (sau MVP, LOS-075).
 
 ## 3. Mô hình chạy (thread & actor)
 
 | Thành phần | Chạy ở đâu | Ghi chú |
 |---|---|---|
 | View, Store | `@MainActor` | Store chỉ giữ snapshot giá trị; không I/O |
-| Repository, `SyncWriter` | `DatabasePool` của GRDB (hàng đợi riêng) | `async` API; ghi luôn trong `write { }` |
+| Repository | `DatabasePool` của GRDB qua SQLiteData (hàng đợi riêng) | `async` API; ghi luôn trong `write { }` |
 | `ValueObservation` | Đọc trên pool, giao kết quả `.immediate` lần đầu rồi về main | Lần đầu đồng bộ để không nháy "đang tải" |
-| `SyncCoordinator` | `actor` riêng | Nhận sự kiện CKSyncEngine, gọi merge, ghi DB |
-| Crypto | Gọi trong `SyncCoordinator` / repository, ngoài main | Giải mã nhật ký khi mở bài, không giải mã cả danh sách |
+| `SyncEngine` (SQLiteData) | Do thư viện quản lý, ngoài main | Ta chỉ đọc trạng thái qua `SyncStatusMonitor` |
 | Định dạng số/ngày | `FormatterCache` tạo một lần | Không tạo formatter trong `body` |
 
 ## 4. Luồng: khởi động lạnh tới màn Hôm nay (mục tiêu ≤ 400 ms)
@@ -93,7 +90,7 @@ sequenceDiagram
   participant OS as iOS
   participant App as LifeOSApp
   participant Env as AppEnvironment
-  participant DB as Database (GRDB)
+  participant DB as Database (SQLiteData/GRDB)
   participant TS as TodayStore
   participant V as TodayView
   OS->>App: launch
@@ -105,7 +102,7 @@ sequenceDiagram
   DB-->>TS: TodaySnapshot (đã định hình)
   TS-->>V: vẽ khung hình đầu có dữ liệu
   Note over App,Env: Sau khung hình đầu
-  App->>Env: start SyncCoordinator (CKSyncEngine), lên lịch thông báo
+  App->>Env: CloudSync.makeEngine (SyncEngine), lên lịch thông báo
 ```
 
 Điểm lỗi: migration lỗi → màn "File dữ liệu trong máy hỏng" (BR-GEN-05), không crash. Kiểm: TC-PERF-01, TC-GEN-03.
@@ -117,25 +114,22 @@ sequenceDiagram
   autonumber
   participant V as View
   participant S as Store (@MainActor)
-  participant R as Repository
-  participant W as SyncWriter
+  participant R as Repository (SQLite…)
   participant DB as SQLite
-  participant O as ValueObservation
+  participant O as Theo dõi (ValueObservation)
+  participant SE as SyncEngine (CloudSync)
   V->>S: toggleTask(id)
   S->>S: cập nhật lạc quan snapshot (tuỳ chọn) + haptic
   S->>R: complete(taskId, at: now)
-  R->>W: write { db in ... }
-  W->>W: hlc = clock.tick()
-  W->>DB: UPDATE task SET status, completed_at, updated_at
-  W->>DB: UPSERT sync_field_clock (task,id,col,hlc) cho từng cột đổi
-  W->>DB: UPSERT sync_outbox (task,id)
+  R->>DB: write { UPDATE task SET status, completed_at, updated_at }
   DB-->>O: thay đổi trong transaction
   O-->>S: snapshot mới
   S-->>V: vẽ lại đúng hàng đổi
-  W-->>SyncCoordinator: notify outbox changed (nếu đồng bộ bật)
+  DB-->>SE: trigger của SQLiteData ghi nhận hàng đổi
+  SE->>SE: xếp gửi lên iCloud theo lịch hệ thống
 ```
 
-Bất biến: **một thay đổi người dùng = một transaction** gồm dữ liệu + đồng hồ trường + outbox. Không có đường ghi nào vòng qua `SyncWriter` cho bảng đồng bộ. Kiểm: TC-SYNC-01..03.
+Bất biến: **một thao tác người dùng = một transaction**. Repository không biết đồng bộ; SyncEngine tự thấy thay đổi qua trigger. Không có đường ghi nào bỏ qua repository cho bảng nghiệp vụ. Kiểm: TC-GEN-01, TC-SYNC-14.
 
 ## 6. Luồng: Ghi nhanh
 
@@ -157,38 +151,27 @@ Bộ hiểu là hàm thuần trong `Capture` (SPEC-quick-capture), có test vect
 ```mermaid
 sequenceDiagram
   autonumber
-  participant W as SyncWriter
-  participant C as SyncCoordinator (actor)
+  participant DB as SQLite (bảng nghiệp vụ)
+  participant MD as Metadatabase SQLiteData
+  participant SE as SyncEngine
   participant E as CKSyncEngine
-  participant K as CryptoProvider
-  participant DB as SQLite
   participant CK as iCloud
-  W->>C: outboxChanged
-  C->>E: state.add(pendingRecordZoneChanges: .save(recordID))
-  E->>C: nextRecordZoneChangeBatch (theo lịch hệ thống)
-  C->>DB: đọc hàng + sync_field_clock
-  C->>K: seal(RowPayload, aad)
-  C-->>E: CKRecord{payload, v, kid}
-  E->>CK: modify (≤250 bản ghi/lô)
+  participant M as SyncStatusMonitor (CloudSync)
+  DB->>MD: trigger ghi hàng đổi
+  SE->>E: xếp bản ghi cần gửi
+  E->>CK: gửi theo lô (theo lịch hệ thống)
   CK-->>E: saved / serverRecordChanged
-  alt saved
-    E->>C: sentRecordZoneChanges(saved)
-    C->>DB: xoá khỏi sync_outbox nếu hlc không đổi
-  else serverRecordChanged
-    C->>K: open(server payload)
-    C->>C: merge(local, server) theo trường
-    C->>DB: ghi kết quả (transaction)
-    C->>E: xếp gửi lại
-  end
+  E-->>SE: kết quả, xung đột thì hợp nhất theo từng trường (bản sửa sau thắng)
+  SE->>DB: ghi kết quả hợp nhất
   Note over CK,E: Nhận (push im lặng / mở app)
   CK-->>E: fetchedRecordZoneChanges
-  E->>C: records + deletions
-  C->>K: open(payload) — lỗi kid lạ → trạng thái needsRecoveryKey
-  C->>C: merge từng trường theo HLC, clock.receive(remote)
-  C->>DB: ghi dữ liệu + field clock + state serialization (một transaction)
+  E-->>SE: bản ghi + xoá
+  SE->>DB: ghi trong transaction, ValueObservation báo màn
+  SE-->>M: sự kiện gửi/nhận/lỗi
+  M-->>M: SyncStatus (đã đồng bộ, chờ, chưa đăng nhập iCloud, lỗi)
 ```
 
-Điểm lỗi và cách xử lý: SPEC-sync §8. Kiểm: TC-SYNC-*, harness LOS-033.
+Mọi chi tiết gửi, nhận và hợp nhất do SQLiteData lo. Phần ta tự làm chỉ có: danh sách bảng (`SyncTables`), `SyncStatusMonitor` cho badge (BR-SYNC-01), và gọi sync khi mở app. LOS-030 đo hành vi thật: lệch giờ, cột lạ từ phiên bản mới hơn, giết app giữa lô. Kiểm: TC-SYNC-05..08, 12, 13, 15.
 
 ## 8. Luồng: lần đầu dùng và máy mới
 
@@ -196,23 +179,16 @@ sequenceDiagram
 stateDiagram-v2
   [*] --> Welcome
   Welcome --> CheckCloud: Bắt đầu
-  Welcome --> Restore: "Tôi đã dùng Life OS trên máy khác"
-  CheckCloud --> FindKey: iCloud bật
+  CheckCloud --> Seed: iCloud bật, chưa có dữ liệu trên iCloud
+  CheckCloud --> FirstSync: iCloud bật, đã có dữ liệu (máy mới)
   CheckCloud --> LocalOnly: iCloud tắt
-  FindKey --> Ready: MK có trong iCloud Keychain
-  FindKey --> Restore: Có KeyBundle trên cloud, Keychain trống
-  FindKey --> CreateVault: Không có KeyBundle
-  LocalOnly --> CreateVault
-  CreateVault --> ShowCode: sinh MK + mã khôi phục
-  ShowCode --> VerifyCode: "Tôi đã cất giữ"
-  VerifyCode --> Ready: nhập đúng 1 nhóm 4 ký tự
-  VerifyCode --> ShowCode: sai → xem lại
-  Restore --> Ready: mở KeyBundle bằng mã
-  Restore --> Restore: sai mã (báo ký tự lạ ngay)
+  Seed --> Ready: tạo dữ liệu mẫu bằng ID v5
+  LocalOnly --> Seed
+  FirstSync --> Ready: skeleton "Đang tải dữ liệu từ iCloud" lần đầu
   Ready --> [*]
 ```
 
-Chi tiết và chặn "hai MK": SPEC-crypto §6. Kiểm: TC-ONB-*.
+MVP không có khoá chủ hay mã khôi phục. Dữ liệu mẫu dùng ID v5, nên hai máy cùng tạo kho sẽ ghi vào cùng bản ghi, không sinh hai bộ danh mục. Màn Chào mừng nói đúng mức bảo vệ (BR-ONB-10). Kiểm: TC-ONB-03, 05, 07.
 
 ## 9. Luồng: tick việc và hoàn tác
 
@@ -226,7 +202,7 @@ sequenceDiagram
   S->>V: UndoToast "Đã xong · Hoàn tác" (4 giây)
   alt bấm Hoàn tác / ⌘Z trong 4 giây
     V->>S: undo()
-    S->>R: reopen(id) — ghi mới với HLC mới (không "xoá" lịch sử)
+    S->>R: reopen(id) — một lần ghi mới (không "xoá" lịch sử)
   else hết giờ
     S->>S: bỏ token hoàn tác
   end
@@ -251,9 +227,9 @@ flowchart LR
 
 | Luồng | Thành phần chính | Target |
 |---|---|---|
-| Khởi động | `LifeOSApp`, `AppEnvironment.live()`, `DatabaseFactory`, `TodayStore` | App, AppFeature, Persistence, TodayFeature |
-| Ghi thay đổi | `SyncWriter`, `HybridLogicalClock`, `*Repository` | Persistence, SyncCore |
+| Khởi động | `LifeOSApp`, `prepareDependencies`, `AppEnvironment.live()`, `AppDatabase`, `TodayStore` | App, AppFeature, Persistence, TodayFeature |
+| Ghi thay đổi | `SQLite*Repository` | Persistence |
 | Ghi nhanh | `QuickCaptureParser`, `CaptureStore` | Capture, CaptureFeature |
-| Đồng bộ | `SyncCoordinator`, `SyncTransport`, `CloudKitSyncTransport`, `RowPayloadCodec`, `Merger` | SyncCore, CloudKitTransport |
-| Khoá | `KeyVault`, `RecoveryCode`, `EnvelopeCodec`, `CryptoKitProvider`, `KeychainStore` | CryptoCore, CryptoApple |
+| Đồng bộ | `CloudSync.makeEngine`, `SyncTables`, `SyncStatusMonitor` | CloudSync |
+| Khoá (sau MVP) | `KeyVault`, `RecoveryCode`, `EnvelopeCodec`, `CryptoKitProvider`, `KeychainStore` | CryptoCore, CryptoApple |
 | Hoàn tác | `UndoCoordinator` (FeatureSupport), `UndoToast` | FeatureSupport, DesignSystem |

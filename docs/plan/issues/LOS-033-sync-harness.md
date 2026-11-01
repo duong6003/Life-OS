@@ -1,7 +1,7 @@
 ---
 id: LOS-033
 title: "Harness đồng bộ tất định nhiều máy"
-milestone: "M4 Đồng bộ iCloud"
+milestone: "M6 Sau MVP"
 labels: [type:feature, area:sync, agent-ok]
 depends_on: [LOS-031]
 size: M

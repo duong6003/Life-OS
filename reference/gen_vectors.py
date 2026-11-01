@@ -91,10 +91,13 @@ def merge_vectors():
         fields = {}
         for c in cols:
             if c in ("id", "updated_at"): continue
-            if t == "journal_entry" and c == "body_sealed":
+            if t == "journal_entry" and c in ("body", "body_sealed"):
                 fields["body"] = "keepBoth"; continue
             fields[c] = "lww"
         tables[t] = fields
+    # Bảng của lớp đồng bộ tự làm (sau MVP, ADR-0016/LOS-075): migration thêm vào, chưa có trong schema MVP.
+    tables.setdefault("journal_conflict", {c: "lww" for c in ("body_sealed", "created_at", "deleted_at", "entry_id", "loser_hlc")})
+    tables = dict(sorted(tables.items()))
     return {"ids.json": {"spec": "SPEC-sync §3.2", **idv},
             "cases.json": {"spec": "SPEC-sync §6", "note": "fields: giá trị + nhãn sau hợp nhất; changed: cột lấy từ remote", "cases": cases},
             "schema.json": {"spec": "data-model.md §3", "schemaVersion": 1, "tables": tables}}

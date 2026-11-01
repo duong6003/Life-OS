@@ -4,7 +4,7 @@
 flowchart TB
   V["Test vector JSON<br/>(hợp đồng Swift ↔ Kotlin)"] --> U
   U["Unit — LifeOSCore<br/>swift test trên Linux, < 30 giây"] --> I
-  I["Integration — Persistence + Sync<br/>GRDB thật, DB tạm, FakeTransport"] --> S
+  I["Integration — Persistence + CloudSync<br/>SQLiteData thật, DB tạm"] --> S
   S["Store — LifeOSFeatures<br/>repository giả, FixedClock"] --> UI
   UI["UI / Perf — XCUITest, XCTMetric<br/>Xcode Cloud"] --> M
   M["Thủ công trên máy thật<br/>cổng mỗi giai đoạn"]
@@ -14,7 +14,7 @@ flowchart TB
 |---|---|---|---|
 | Vector | `Tests/*/VectorTests.swift` đọc `TestVectors/` qua `VectorLoader` | Mỗi PR (Linux) | Không sửa vector để test xanh: vector đổi = spec đổi |
 | Unit | `Packages/LifeOSCore/Tests` | Mỗi PR (Linux) | Hàm thuần, không I/O |
-| Integration | `PersistenceTests`, `SyncCoreTests/Harness` | Mỗi PR (Linux) | DB `:memory:` hoặc file tạm; harness 10.000 vòng |
+| Integration | `PersistenceTests`, `CloudSyncTests` (LifeOSData) | Mỗi PR (macOS, Xcode Cloud) | DB `:memory:` hoặc file tạm. Sau MVP thêm `SyncCoreTests/Harness` 10.000 vòng (Linux) |
 | Store | `LifeOSFeatures/Tests` | Mỗi PR (Xcode Cloud / máy dev) | Không simulator nếu được (`swift test` trên macOS) |
 | UI/Perf | `App/LifeOSUITests`, `LifeOSPerfTests` | PR nhãn `perf` + hằng đêm | DB seed 3 năm |
 | Thủ công | `docs/test-cases/*` mức M | Cổng giai đoạn, trước TestFlight | Ghi kết quả vào issue cổng |

@@ -16,7 +16,7 @@ jobs:
       - name: Module boundaries (ADR-0002)
         run: bash scripts/check-core-imports.sh
       - name: Schema copy matches schema/
-        run: diff -r schema Packages/LifeOSCore/Sources/Persistence/Migrations/sql
+        run: diff -r schema Packages/LifeOSData/Sources/Persistence/Migrations/sql
       - name: Design tokens up to date (ADR-0009)
         run: python3 -I design/tokens/generate.py --check
       - name: Test vectors match reference (Python + TypeScript)
@@ -29,7 +29,6 @@ jobs:
     container: swift:6.2-noble
     steps:
       - uses: actions/checkout@v4
-      - run: apt-get update && apt-get install -y --no-install-recommends libsqlite3-dev
       - name: Build & test LifeOSCore on Linux
         working-directory: Packages/LifeOSCore
         run: swift build && swift test --parallel

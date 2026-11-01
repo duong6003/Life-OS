@@ -1,7 +1,7 @@
 ---
 id: LOS-031
 title: "SyncCoordinator, RowPayloadCodec, FakeTransport"
-milestone: "M4 Đồng bộ iCloud"
+milestone: "M6 Sau MVP"
 labels: [type:feature, area:sync, agent-ok]
 depends_on: [LOS-023, LOS-013]
 size: L

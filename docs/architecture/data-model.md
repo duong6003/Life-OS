@@ -1,6 +1,6 @@
 # Mô hình dữ liệu
 
-Nguồn sự thật của schema là **`schema/*.sql`** (SQL thuần, dùng chung cho Swift và Android). Migration Swift `M0001_Initial` chạy đúng file `schema/0001_initial.sql`. Quy tắc: ADR-0003, ADR-0013, ADR-0014.
+Nguồn sự thật của schema là **`schema/*.sql`** (SQL thuần, dùng chung cho Swift và Android). Migration Swift `M0001_Initial` chạy đúng file `schema/0001_initial.sql`. Quy tắc: ADR-0003, ADR-0013, ADR-0014, ADR-0016 (ràng buộc của SyncEngine: cột `NOT NULL` có `ON CONFLICT REPLACE` + `DEFAULT`, không `UNIQUE`, chỉ thêm).
 
 ## 1. Sơ đồ quan hệ (MVP)
 
@@ -8,7 +8,6 @@ Nguồn sự thật của schema là **`schema/*.sql`** (SQL thuần, dùng chun
 erDiagram
   area ||--o{ task : "area_id"
   habit ||--o{ habit_log : "habit_id"
-  journal_entry ||--o{ journal_conflict : "entry_id"
   category ||--o{ txn : "category_id"
   category ||--o{ budget : "category_id (NULL = tổng)"
   task {
@@ -39,13 +38,7 @@ erDiagram
     TEXT day
     INTEGER mood "1..5"
     INTEGER energy "1..5"
-    BLOB body_sealed
-  }
-  journal_conflict {
-    TEXT id PK
-    TEXT entry_id
-    BLOB body_sealed
-    TEXT loser_hlc
+    TEXT body
   }
   category {
     TEXT id PK
@@ -86,26 +79,19 @@ erDiagram
 | `task` | Có | v7 | `inbox=1` khi tạo từ Ghi nhanh mà không có ngày (BR-CAP-04) |
 | `habit` | Có | v7 | Lưu trữ = `archived_at`, không xoá lịch sử |
 | `habit_log` | Có | **v5** `habit_log:<habit_id>:<day>` | Hai máy tick cùng ngày → một hàng (BR-HAB-03) |
-| `journal_entry` | Có | **v5** `journal_entry:<day>` | Một mục mỗi ngày; `body` chính sách `keepBoth` |
-| `journal_conflict` | Có | **v5** `journal_conflict:<entry_id>:<loser_hlc>` | Máy nào phát hiện cũng sinh cùng ID |
+| `journal_entry` | Có | **v5** `journal_entry:<day>` | Một mục mỗi ngày. MVP: `body` LWW như mọi trường; sau MVP: `keepBoth` (ADR-0012) |
 | `category` | Có | v7 | Mỗi `kind` có đúng một `is_fallback=1` ("Khác") trong dữ liệu mẫu |
 | `txn` | Có | v7 | `amount > 0`; dấu do `kind` |
 | `budget` | Có | **v5** `budget:<month>:<category_id or "total">` | Tháng chưa có thì kế thừa tháng gần nhất (BR-SPD-05) |
 | `weekly_review` | Có | **v5** `weekly_review:<week_start>` | |
 | `setting` | Có | **v5** `setting:<key>` | Giá trị JSON, LWW cả giá trị |
-| `sync_*`, `local_setting` | **Không** | — | Nội bộ máy |
+| `local_setting` | **Không** | — | Nội bộ máy, không đăng ký với SyncEngine |
 
-## 3. Cột đồng bộ và chính sách hợp nhất
+## 3. Đồng bộ và hợp nhất
 
-Mọi cột của bảng đồng bộ (trừ `id`) là một **trường đồng bộ** với chính sách `lww`, trừ:
+**MVP (ADR-0016):** bảng đồng bộ được đăng ký với `SyncEngine` của SQLiteData, đúng một chỗ: `LifeOSData/Sources/CloudSync/SyncTables.swift`. Mỗi trường hợp nhất theo kiểu bản sửa sau cùng thắng; xem SyncEngine trong LOS-021. ID v5 cho khoá tự nhiên vẫn giữ nguyên tác dụng: hai máy tick cùng một thói quen trong cùng một ngày sẽ ghi vào cùng một bản ghi CloudKit. `updated_at` do repository tự ghi; nó không dùng để hợp nhất.
 
-| Bảng.cột | Chính sách | Lý do |
-|---|---|---|
-| `journal_entry.body_sealed` | `keepBoth` | ADR-0012 |
-| `*.created_at` | `lww` nhưng chỉ ghi lúc tạo | Không bao giờ sửa sau |
-| `*.updated_at` | Không đồng bộ như trường; mỗi máy tự tính = max mốc của các trường | Tránh mọi lần sửa đều "xung đột" ở cột này |
-
-Danh sách đầy đủ nằm trong `SyncSchemaRegistry` (Persistence) và `TestVectors/merge/schema.json`. Hai nơi phải khớp (test `TC-SYNC-10`).
+**Sau MVP (LOS-075):** chuyển sang HLC theo trường của SPEC-sync. `journal_entry.body` đổi sang chính sách `keepBoth`: migration thêm `body_sealed` và bảng `journal_conflict`. Danh sách chính sách nằm ở `TestVectors/merge/schema.json`.
 
 ## 4. Dữ liệu mẫu khi tạo kho mới
 

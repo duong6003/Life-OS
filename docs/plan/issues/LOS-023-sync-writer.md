@@ -1,7 +1,7 @@
 ---
 id: LOS-023
 title: "SyncWriter, field clock, outbox, schema registry"
-milestone: "M1 Lõi dữ liệu cục bộ"
+milestone: "M6 Sau MVP"
 labels: [type:feature, area:persistence, area:sync, agent-ok]
 depends_on: [LOS-020, LOS-014]
 size: M

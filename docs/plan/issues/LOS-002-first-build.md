@@ -12,8 +12,9 @@ Mọi gói trong Packages/ build được bằng Xcode 26.x; LifeOSCore `swift t
 
 ## Việc cần làm
 - [ ] `cd Packages/LifeOSCore && swift build && swift test`
+- [ ] `cd Packages/LifeOSData && swift build` (kéo sqlite-data; nếu Xcode quá cũ so với swift-tools của sqlite-data thì ghi lại cho LOS-021)
 - [ ] Mở Packages/LifeOSDesignSystem trong Xcode, build iOS + macOS, sửa API lệch (lineHeight(.multiple), glassEffect, tabViewBottomAccessory, tabBarMinimizeBehavior, @Entry)
-- [ ] Ghim GRDB trong Package.resolved, commit
+- [ ] Ghim sqlite-data + GRDB trong Package.resolved, commit
 - [ ] Ghi các API phải sửa vào HANDOFF.md §5c
 
 ## Tiêu chí nghiệm thu

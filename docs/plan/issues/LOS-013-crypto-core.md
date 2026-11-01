@@ -1,7 +1,7 @@
 ---
 id: LOS-013
 title: "CryptoCore: envelope, dẫn khoá, mã khôi phục"
-milestone: "M1 Lõi dữ liệu cục bộ"
+milestone: "M6 Sau MVP"
 labels: [type:feature, area:crypto, agent-ok]
 depends_on: [LOS-010, LOS-006]
 size: M

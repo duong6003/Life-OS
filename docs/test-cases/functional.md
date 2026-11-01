@@ -45,8 +45,8 @@
 |---|---|---|---|---|---|
 | TC-JRN-01 | Một mục mỗi ngày | Check-in rồi viết bài cùng ngày | Một hàng `journal_entry` ID v5 ngày đó | BR-JRN-01 | I |
 | TC-JRN-02 | Check-in nhanh | Chạm tâm trạng 4, năng lượng 3, gõ một dòng | Lưu ngay mỗi chạm; ghi lại lần 2 ghi đè | BR-JRN-02 | S, M (≤30 giây) |
-| TC-JRN-03 | Mã hoá mức trường | Viết "bí mật", đọc DB thô | `body_sealed` bắt đầu `LOS\x01`, không chứa chuỗi rõ | BR-JRN-04 | I |
-| TC-JRN-04 | Giữ cả hai | Máy A, B cùng sửa từ một bản, đồng bộ | Cả hai máy: body = bản HLC lớn, 1 `journal_conflict` cùng ID; "Bỏ bản này" + Hoàn tác | BR-JRN-05 | V, I, UI |
+| TC-JRN-03 | [Sau MVP, LOS-075] Mã hoá mức trường | Viết "bí mật", đọc DB thô | `body_sealed` bắt đầu `LOS\x01`, không chứa chuỗi rõ | BR-JRN-04 | I |
+| TC-JRN-04 | [Sau MVP, LOS-075] Giữ cả hai | Máy A, B cùng sửa từ một bản, đồng bộ | Cả hai máy: body = bản HLC lớn, 1 `journal_conflict` cùng ID; "Bỏ bản này" + Hoàn tác | BR-JRN-05 | V, I, UI |
 | TC-JRN-05 | Lưu tự động | Gõ, dừng 800 ms; gõ rồi thoát màn ngay | Cả hai trường hợp đều lưu; không ghi mỗi phím | BR-JRN-06 | S |
 
 ## SPD — Thu chi

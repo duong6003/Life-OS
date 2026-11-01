@@ -1,5 +1,7 @@
 # SPEC-sync · Life OS Sync Spec v1
 
+> **Áp dụng sau MVP (ADR-0016, LOS-075).** MVP đồng bộ bằng SyncEngine của SQLiteData; spec này là hợp đồng cho lớp đồng bộ mã hoá tự làm thay `CloudSync` sau này, và cho Android. Schema MVP dùng `journal_entry.body` (TEXT); migration của LOS-075 thêm `body_sealed` và `journal_conflict`.
+
 - Version: **1.0-draft** (01/11/2026)
 - Trạng thái: bản nháp để code LOS-012 (HLC), LOS-014 (merge), LOS-023 (SyncWriter), LOS-031 (coordinator); khoá thành 1.0 khi harness LOS-033 xanh.
 - Kiểm bằng: `TestVectors/hlc/*.json`, `TestVectors/merge/*.json`, code tham chiếu `reference/lifeos_ref/sync.py`.

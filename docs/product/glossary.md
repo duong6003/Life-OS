@@ -18,7 +18,7 @@
 | Ngân sách | `Budget` | Hạn mức chi theo tháng |
 | Review tuần | `WeeklyReview` | Tuần bắt đầu thứ Hai |
 | Ghi nhanh | `QuickCapture` | Ô nhập hiểu mọi loại |
-| Mã khôi phục | `RecoveryCode` | 28 ký tự, mở kho trên máy mới |
+| Mã khôi phục | `RecoveryCode` | 28 ký tự, mở kho trên máy mới (sau MVP, ADR-0016) |
 | Khoá chủ | `MasterKey` (MK) | 32 byte, không bao giờ hiện cho người dùng |
 | Kho | `Vault` | Toàn bộ dữ liệu dưới một MK |
 | Chờ đồng bộ | `SyncStatus.pending` | Đã lưu trong máy, chưa gửi |

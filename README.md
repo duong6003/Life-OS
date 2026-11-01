@@ -1,6 +1,6 @@
 # Life OS
 
-App quản lý cuộc sống cá nhân, **local-first**: dữ liệu nằm trong máy, đồng bộ qua iCloud của chính người dùng, mã hoá đầu-cuối, không có máy chủ riêng. Bản đầu tiên cho iPhone, iPad, Mac (SwiftUI). Android làm sau theo spec và test vector trong repo này.
+App quản lý cuộc sống cá nhân, **local-first**: dữ liệu nằm trong máy, đồng bộ qua iCloud của chính người dùng (MVP: SQLiteData SyncEngine; mã hoá đầu-cuối tự làm sau MVP, ADR-0016), không có máy chủ riêng. Bản đầu tiên cho iPhone, iPad, Mac (SwiftUI). Android làm sau theo spec và test vector trong repo này.
 
 Thứ tự ưu tiên cho mọi quyết định: **(1) mượt và tiết kiệm tài nguyên (RAM, pin, dung lượng), (2) đẹp và hiệu ứng tốt.**
 

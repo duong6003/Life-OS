@@ -3,7 +3,7 @@ id: LOS-025
 title: "Cổng M1: lõi dữ liệu cục bộ"
 milestone: "M1 Lõi dữ liệu cục bộ"
 labels: [type:gate, perf]
-depends_on: [LOS-022, LOS-024, LOS-015, LOS-013]
+depends_on: [LOS-022, LOS-024, LOS-015]
 size: S
 ---
 
@@ -21,4 +21,4 @@ Lõi đủ chắc để dựng UI.
 - performance-budget.md
 
 ## Phụ thuộc
-LOS-022, LOS-024, LOS-015, LOS-013
+LOS-022, LOS-024, LOS-015

@@ -1,5 +1,9 @@
 # Test case: đồng bộ, mã hoá, bắt đầu
 
+> **Phạm vi theo ADR-0016 (01/11/2026).** MVP dùng SyncEngine của SQLiteData, chưa có HLC, outbox, envelope hay mã khôi phục.
+> - **Chạy trong MVP:** TC-SYNC-05, 06, 07, 08, 12, 13, 14, 15; TC-ONB-03, 05, 07. Với SYNC-06, 07, 08 và 13, kiểm hành vi của SyncEngine, không kiểm `sync_outbox` hay `sync_unknown`. Badge chờ chỉ hiện "Chờ đồng bộ" mà không đếm số thay đổi, trừ khi SyncEngine cho đếm (LOS-026 kiểm).
+> - **Sau MVP (LOS-075):** TC-SYNC-00..04, 09, 10, 11; mọi TC-CRY; TC-ONB-01, 02, 04, 06.
+
 ## SYNC
 | ID | Kiểm | Bước / dữ liệu | Mong đợi | Covers | Mức |
 |---|---|---|---|---|---|
@@ -16,6 +20,8 @@
 | TC-SYNC-10 | Registry = schema vector | So `SyncSchemaRegistry` với `TestVectors/merge/schema.json` | Khớp hoàn toàn | data-model §3 | U |
 | TC-SYNC-11 | Harness hội tụ | 3 máy ảo, 10.000 vòng ngẫu nhiên (seed cố định), lệch giờ ±10 phút, rớt mạng giữa lô | Mọi bảng giống hệt nhau; không mất bản nhật ký nào | SPEC-sync §10 | U |
 | TC-SYNC-12 | CloudKit thật | 2 thiết bị thật, cùng Apple ID: sửa ngoại tuyến cả hai, bật mạng | Hội tụ trong < 1 phút khi app mở; đúng như harness | ADR-0005 | M |
+| TC-SYNC-14 | Ranh giới đồng bộ | `bash scripts/check-core-imports.sh` | `SyncEngine` chỉ xuất hiện trong `LifeOSData/Sources/CloudSync` và `AppFeature` | ADR-0016 | CI |
+| TC-SYNC-15 | Schema hợp lệ cho SyncEngine | Tạo SyncEngine với mọi bảng đồng bộ trên DB đã migrate (test trên macOS) | Khởi tạo không lỗi; thêm `UNIQUE` vào một bảng thử thì báo lỗi | ADR-0016 | I |
 | TC-SYNC-13 | Change token sau khi lưu | Giết app ngay sau khi nhận lô | Lần mở sau nhận lại lô đó (không mất), áp lại không đổi kết quả | SPEC-sync §7 | I (FakeTransport) |
 
 ## CRY
@@ -37,4 +43,5 @@
 | TC-ONB-03 | Máy mới có Keychain | Cài trên iPad cùng Apple ID | Không hỏi mã; skeleton lần đầu; dữ liệu về | BR-ONB-05 | M |
 | TC-ONB-04 | Nhập mã | "K7QO…" ; mã sai đủ 28 ký tự | "Có ký tự đọc nhầm: O" ngay khi gõ; "Mã chưa đúng" sau khi gửi | BR-ONB-06 | S |
 | TC-ONB-05 | Không iCloud | Tắt iCloud, dùng app một tuần dữ liệu | Mọi tính năng chạy; bật iCloud → tải KeyBundle + toàn bộ dữ liệu lên | BR-ONB-07 | M, I |
+| TC-ONB-07 | Nói đúng mức bảo vệ | Mở màn Bắt đầu và Cài đặt › Bảo mật | Có câu của BR-ONB-10; không có chữ "mã hoá đầu-cuối" như mặc định | BR-ONB-10 | UI |
 | TC-ONB-06 | Khôi phục máy sạch | Xoá app trên mọi máy, xoá Keychain item; cài lại, nhập mã | Toàn bộ dữ liệu về, nhật ký đọc được | SPEC-crypto §6.2 | M (cổng GĐ3) |

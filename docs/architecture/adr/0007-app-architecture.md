@@ -1,6 +1,6 @@
 # ADR-0007: Store @Observable, không TCA, tiêm phụ thuộc qua init
 
-- Trạng thái: Chấp nhận
+- Trạng thái: Chấp nhận; sửa đổi bởi ADR-0016 (defaultDatabase/defaultSyncEngine qua prepareDependencies)
 - Liên quan: module-structure.md, conventions.md §4
 
 ## Bối cảnh

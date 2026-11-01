@@ -1,6 +1,6 @@
 # ADR-0004: Hợp nhất bằng HLC + LWW theo trường + tombstone
 
-- Trạng thái: Chấp nhận
+- Trạng thái: Hoãn tới sau MVP bởi ADR-0016 (MVP dùng SyncEngine của SQLiteData; LOS-075)
 - Liên quan: SPEC-sync, ADR-0012, TestVectors/hlc, TestVectors/merge
 
 ## Bối cảnh

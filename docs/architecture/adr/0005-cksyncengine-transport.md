@@ -1,6 +1,6 @@
 # ADR-0005: Kênh đồng bộ CKSyncEngine sau protocol SyncTransport
 
-- Trạng thái: Chấp nhận · cách đóng gói bản ghi chờ spike LOS-030
+- Trạng thái: Hoãn tới sau MVP bởi ADR-0016 (LOS-075)
 - Liên quan: SPEC-sync §7, ADR-0006
 
 ## Bối cảnh

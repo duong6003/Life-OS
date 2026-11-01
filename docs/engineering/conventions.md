@@ -7,7 +7,7 @@ Swift 6.2+, **Swift 6 language mode, strict concurrency complete** ở mọi gó
 |---|---|---|
 | Type | UpperCamel, danh từ | `TaskItem`, `HabitLog`, `TodaySnapshot` |
 | Protocol | Danh từ hoặc `-ing`/`-able` | `TaskRepository`, `SyncTransport`, `CryptoProvider` |
-| Cài đặt protocol | `<Tech><Protocol>` | `GRDBTaskRepository`, `CloudKitSyncTransport`, `CryptoKitProvider` |
+| Cài đặt protocol | `<Tech><Protocol>` | `SQLiteTaskRepository`, `NotificationScheduler`; sau MVP `CloudKitSyncTransport`, `CryptoKitProvider` |
 | Giả trong test | `Fake<Protocol>` / `Fixed<…>` | `FakeTransport`, `FixedClock` |
 | View màn | `<Name>Screen` | `TodayScreen` |
 | View con | `<Thing>View` / `<Thing>Row` | `TaskRowView` |
@@ -33,9 +33,9 @@ Tên trong code tiếng Anh; comment được viết tiếng Việt, ngắn, gi�
 - Không `!` (force unwrap), `try!`, `as!` ngoài test. `fatalError` chỉ cho trạng thái lập trình sai không thể xảy ra, kèm lý do.
 
 ## 4. Concurrency
-- View, Store: `@MainActor`. Repository: `Sendable`, API `async`, thực thi trên pool GRDB.
+- View, Store: `@MainActor`. Repository: `Sendable`, API `async`, thực thi trên pool GRDB (qua SQLiteData).
 - Không `DispatchQueue` mới; dùng structured concurrency. `Task { }` chỉ trong Store (`start()`), giữ handle để huỷ.
-- `actor` cho thành phần có trạng thái dùng chung: `SyncCoordinator`, `KeyVault`.
+- `actor` cho thành phần có trạng thái dùng chung: `SyncStatusMonitor`; sau MVP thêm `SyncCoordinator`, `KeyVault`.
 - Không `@unchecked Sendable` trừ adapter bọc API Apple chưa Sendable, có comment lý do.
 
 ## 5. SwiftUI (ưu tiên hiệu năng)
@@ -48,13 +48,13 @@ Tên trong code tiếng Anh; comment được viết tiếng Việt, ngắn, gi�
 - Mọi control tự vẽ có `accessibilityLabel`, `accessibilityValue`, trait đúng.
 
 ## 6. Dữ liệu
-- Mọi ghi bảng đồng bộ qua `SyncWriter` (SPEC-sync §5). Mọi truy vấn có index cho điều kiện lọc/sắp xếp (TC-PERF-10).
+- Mọi ghi bảng nghiệp vụ qua repository; `SyncEngine` chỉ ở `CloudSync` (ADR-0016). Mọi truy vấn có index cho điều kiện lọc/sắp xếp (TC-PERF-10).
 - Dùng cursor/`fetchCursor` cho tập lớn; không `fetchAll` không giới hạn trên bảng lớn trong đường nóng.
 - Không SQL ghép chuỗi với dữ liệu người dùng; luôn tham số hoá.
 - Migration mới = file mới; không sửa migration đã merge vào `main`.
 
 ## 7. Lỗi
-- Mỗi lớp có enum lỗi riêng: `DomainError`, `PersistenceError`, `SyncError`, `CryptoError`.
+- Mỗi lớp có enum lỗi riêng: `DomainError`, `PersistenceError`, `CloudSyncError`; sau MVP `SyncError`, `CryptoError`.
 - Store đổi lỗi thành `ScreenState.error(UserFacingError)` chỉ thuộc 3 loại ở BR-GEN-08; còn lại log + badge đồng bộ.
 - Không nuốt lỗi im lặng: `catch` phải log (category theo module) hoặc chuyển tiếp.
 
@@ -64,7 +64,7 @@ Tên trong code tiếng Anh; comment được viết tiếng Việt, ngắn, gi�
 - Đường nóng có `os_signpost`: `today.firstFrame`, `capture.parse`, `sync.applyBatch`, `spending.monthSwitch`.
 
 ## 9. Phụ thuộc
-- Cho phép: GRDB.swift (ghim `Package.resolved`). Thêm gói mới cần ADR (lý do, dung lượng, giấy phép, bảo trì).
+- Cho phép: GRDB.swift, sqlite-data và các gói Point-Free nó kéo theo (ADR-0016; ghim `Package.resolved`). Thêm gói mới cần ADR (lý do, dung lượng, giấy phép, bảo trì).
 - Không thư viện UI bên thứ ba. Không analytics/crash SDK (dùng MetricKit + Organizer).
 
 ## 10. Chuỗi và ngôn ngữ

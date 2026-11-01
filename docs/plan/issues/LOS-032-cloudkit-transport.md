@@ -1,9 +1,9 @@
 ---
 id: LOS-032
 title: "CloudKitSyncTransport và KeyBundle"
-milestone: "M4 Đồng bộ iCloud"
+milestone: "M6 Sau MVP"
 labels: [type:feature, area:sync, area:crypto]
-depends_on: [LOS-030, LOS-031, LOS-051]
+depends_on: [LOS-031, LOS-051]
 size: L
 ---
 
@@ -23,4 +23,4 @@ size: L
 - SPEC-crypto §6
 
 ## Phụ thuộc
-LOS-030, LOS-031, LOS-051
+LOS-031, LOS-051

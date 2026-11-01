@@ -11,7 +11,7 @@ Mỗi mục có **gợi ý mặc định**: repo đã viết theo mặc định 
 | D. Chỉ SwiftUI Preview | Không ảnh hưởng | Thấp | Thấp | Không | Khám phá phương án chậm |
 Ảnh hưởng: `docs/design/design-workflow.md`, issue LOS-005.
 
-## D2. UI đọc dữ liệu bằng gì
+## D2. UI đọc dữ liệu bằng gì — **ĐÃ CHỐT 01/11 (ADR-0016)**: dùng SQLiteData; Store đọc qua repository (bên trong dùng theo dõi của SQLiteData/GRDB), không `@FetchAll` trong View.
 | Lựa chọn | Hiệu năng | Phụ thuộc thêm | Agent quen | Ghi chú |
 |---|---|---|---|---|
 | **A. `ValueObservation` của GRDB → snapshot → Store** | Rất tốt, kiểm soát hoàn toàn | 0 | Vừa | **Gợi ý mặc định** |

@@ -1,9 +1,9 @@
 ---
 id: LOS-051
 title: "KeyVault: tạo kho, giữ MK, mã hoá trường"
-milestone: "M1 Lõi dữ liệu cục bộ"
+milestone: "M6 Sau MVP"
 labels: [type:feature, area:crypto, agent-ok]
-depends_on: [LOS-050, LOS-020]
+depends_on: [LOS-050]
 size: M
 ---
 
@@ -22,4 +22,4 @@ Một nơi duy nhất biết MK; feature chỉ thấy seal/open trường.
 - SPEC-crypto §5–6
 
 ## Phụ thuộc
-LOS-050, LOS-020
+LOS-050

@@ -55,8 +55,8 @@ Mỗi quy tắc có mã `BR-<MODULE>-<NN>`, phạm vi (MVP / Mở rộng) và te
 | BR-JRN-01 | Một mục nhật ký mỗi ngày (ID v5 theo ngày); check-in tối và bài viết cùng một mục. **(mặc định)** | MVP | TC-JRN-01 |
 | BR-JRN-02 | Check-in: tâm trạng 1 chạm, năng lượng 1 chạm, một dòng tuỳ chọn; ≤ 30 giây. Có thể ghi lại nhiều lần, lần sau ghi đè. | MVP | TC-JRN-02 |
 | BR-JRN-03 | Thẻ Check-in trên Hôm nay hiện từ 18:00 nếu chưa có tâm trạng hôm nay. **(mặc định)** | MVP | TC-TDY-04 |
-| BR-JRN-04 | Nội dung bài mã hoá mức trường; danh sách chỉ hiện ngày + tâm trạng, giải mã khi mở bài. | MVP | TC-JRN-03 |
-| BR-JRN-05 | Hai máy cùng sửa một bài → giữ cả hai (ADR-0012): bản mới hơn ở trên, bản kia hiện ngay dưới với nhãn "Bản từ thiết bị khác", nút "Bỏ bản này" có Hoàn tác. Không chặn màn. | MVP | TC-JRN-04, vector |
+| BR-JRN-04 | Danh sách chỉ hiện ngày + tâm trạng, nội dung bài chỉ tải khi mở bài. Sau MVP: nội dung mã hoá mức trường (LOS-075). | MVP | TC-JRN-03 |
+| BR-JRN-05 | Hai máy cùng sửa một bài → giữ cả hai (ADR-0012): bản mới hơn ở trên, bản kia hiện ngay dưới với nhãn "Bản từ thiết bị khác", nút "Bỏ bản này" có Hoàn tác. Không chặn màn. | Sau MVP (ADR-0016, LOS-075) | TC-JRN-04, vector |
 | BR-JRN-06 | Lưu tự động khi gõ (debounce 800 ms) và khi rời màn; không có nút Lưu. | MVP | TC-JRN-05 |
 
 ## Thu chi (SPD)
@@ -89,25 +89,26 @@ Mỗi quy tắc có mã `BR-<MODULE>-<NN>`, phạm vi (MVP / Mở rộng) và te
 | Mã | Quy tắc | Phạm vi | Test |
 |---|---|---|---|
 | BR-ONB-01 | Không tài khoản, không mật khẩu, không đăng xuất. | MVP | review |
-| BR-ONB-02 | Lần đầu: Chào mừng → Cất giữ mã khôi phục → kiểm tra **một nhóm 4 ký tự** chọn ngẫu nhiên → vào app. | MVP | TC-ONB-01 |
-| BR-ONB-03 | Mã khôi phục không chọn được dạng chữ; chép chỉ trong máy (không Universal Clipboard), tự xoá sau 2 phút; có "In hoặc lưu PDF". | MVP | TC-ONB-02 |
-| BR-ONB-04 | Cảnh báo rõ: "Cất mã ở nơi khác với điện thoại. Mất cả máy lẫn mã thì không ai mở lại được dữ liệu, kể cả Life OS." ở bước cất mã và trong Cài đặt. | MVP | review |
-| BR-ONB-05 | Máy mới có Keychain chứa khoá → vào thẳng, chỉ hiện "Đang tải dữ liệu từ iCloud" (skeleton) lần đầu. | MVP | TC-ONB-03 |
-| BR-ONB-06 | Nhập mã: ký tự ngoài bảng báo ngay ("Có ký tự đọc nhầm: O"); sai mã báo "Mã chưa đúng", không giới hạn số lần (khoá entropy cao, thử offline không có ích). | MVP | TC-ONB-04 |
+| BR-ONB-02 | Lần đầu: Chào mừng → Cất giữ mã khôi phục → kiểm tra **một nhóm 4 ký tự** chọn ngẫu nhiên → vào app. | Sau MVP (ADR-0016, LOS-075) | TC-ONB-01 |
+| BR-ONB-03 | Mã khôi phục không chọn được dạng chữ; chép chỉ trong máy (không Universal Clipboard), tự xoá sau 2 phút; có "In hoặc lưu PDF". | Sau MVP (ADR-0016, LOS-075) | TC-ONB-02 |
+| BR-ONB-04 | Cảnh báo rõ: "Cất mã ở nơi khác với điện thoại. Mất cả máy lẫn mã thì không ai mở lại được dữ liệu, kể cả Life OS." ở bước cất mã và trong Cài đặt. | Sau MVP (ADR-0016, LOS-075) | review |
+| BR-ONB-05 | Máy mới đăng nhập cùng tài khoản iCloud → vào thẳng, chỉ hiện "Đang tải dữ liệu từ iCloud" (skeleton) lần đầu. (Sau MVP thêm điều kiện Keychain có khoá.) | MVP | TC-ONB-03 |
+| BR-ONB-06 | Nhập mã: ký tự ngoài bảng báo ngay ("Có ký tự đọc nhầm: O"); sai mã báo "Mã chưa đúng", không giới hạn số lần (khoá entropy cao, thử offline không có ích). | Sau MVP (ADR-0016, LOS-075) | TC-ONB-04 |
+| BR-ONB-10 | MVP (ADR-0016): màn Bắt đầu và Cài đặt › Bảo mật nói đúng mức bảo vệ: "Dữ liệu lưu trong máy và iCloud của bạn. Bật Bảo vệ dữ liệu nâng cao trong cài đặt iCloud để mã hoá đầu-cuối." Không dùng chữ "mã hoá đầu-cuối" như mặc định. | MVP | review |
 | BR-ONB-07 | Chưa bật iCloud vẫn dùng đầy đủ trong máy; badge "Chưa đăng nhập iCloud · vẫn lưu trong máy". | MVP | TC-ONB-05 |
-| BR-ONB-08 | Không bao giờ tự sinh khoá chủ thứ hai khi cloud đã có kho (SPEC-crypto §6.3). | MVP | TC-CRY-05 |
-| BR-ONB-09 | Đổi mã khôi phục trong Cài đặt: mã cũ hết hiệu lực ngay khi mã mới đã kiểm tra xong. | MVP | TC-CRY-06 |
+| BR-ONB-08 | Không bao giờ tự sinh khoá chủ thứ hai khi cloud đã có kho (SPEC-crypto §6.3). | Sau MVP (ADR-0016, LOS-075) | TC-CRY-05 |
+| BR-ONB-09 | Đổi mã khôi phục trong Cài đặt: mã cũ hết hiệu lực ngay khi mã mới đã kiểm tra xong. | Sau MVP (ADR-0016, LOS-075) | TC-CRY-06 |
 
 ## Đồng bộ (SYNC)
 | Mã | Quy tắc | Phạm vi | Test |
 |---|---|---|---|
 | BR-SYNC-01 | Ngoại tuyến không phải lỗi; badge "Chờ đồng bộ · n thay đổi", màu chữ thường. | MVP | TC-SYNC-07 |
-| BR-SYNC-02 | Trường sửa sau cùng (HLC) thắng, theo **từng trường**. | MVP | vector |
+| BR-SYNC-02 | Trường sửa sau cùng thắng, theo **từng trường**. MVP: SyncEngine của SQLiteData; sau MVP: HLC (SPEC-sync). | MVP | vector |
 | BR-SYNC-03 | Xoá thắng sửa cũ hơn; sửa trên hàng đã xoá không hồi sinh hàng. | MVP | vector |
 | BR-SYNC-04 | Đồng bộ chạy sau khung hình đầu, theo lịch hệ thống; không polling. | MVP | TC-PERF-06 |
 | BR-SYNC-05 | Code đọc không giả định bất biến giữa các trường sau hợp nhất (vd. `status` là nguồn duy nhất cho "đã xong"). | MVP | TC-SYNC-05 |
-| BR-SYNC-06 | Máy đặt sai giờ không làm kẹt đồng bộ (SPEC-sync §2.2). | MVP | vector |
-| BR-SYNC-07 | Dữ liệu từ phiên bản app mới hơn được giữ, không mất, áp lại sau khi cập nhật. | MVP | TC-SYNC-06 |
+| BR-SYNC-06 | Máy đặt sai giờ không làm kẹt đồng bộ (SPEC-sync §2.2). | Sau MVP (MVP: kiểm hành vi SyncEngine trong LOS-030) | vector |
+| BR-SYNC-07 | Dữ liệu từ phiên bản app mới hơn được giữ, không mất, áp lại sau khi cập nhật. | MVP (SyncEngine; xác minh LOS-030) | TC-SYNC-06 |
 
 ## Nhắc nhở (REM) — Mở rộng
 | Mã | Quy tắc | Phạm vi | Test |

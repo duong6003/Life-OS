@@ -1,6 +1,6 @@
 # ADR-0012: Nội dung nhật ký xung đột thì giữ cả hai bản
 
-- Trạng thái: Chấp nhận (đã thể hiện trong design 31/10)
+- Trạng thái: Hoãn tới sau MVP bởi ADR-0016 (MVP: LWW theo trường)
 - Liên quan: SPEC-sync §6.3, BR-JRN-05
 
 ## Quyết định

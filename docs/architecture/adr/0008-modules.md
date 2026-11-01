@@ -1,6 +1,6 @@
 # ADR-0008: 4 gói SPM cục bộ, app target mỏng, lõi build được trên Linux
 
-- Trạng thái: Chấp nhận
+- Trạng thái: Chấp nhận; sửa đổi bởi ADR-0016 (thêm gói LifeOSData)
 - Liên quan: module-structure.md, ADR-0002
 
 ## Bối cảnh

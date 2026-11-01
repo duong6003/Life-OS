@@ -1,5 +1,7 @@
 # SPEC-crypto · Life OS Crypto Spec v1
 
+> **Áp dụng sau MVP (ADR-0016, LOS-075).** MVP không có khoá chủ, envelope hay mã khôi phục; dữ liệu iCloud được bảo vệ theo chuẩn iCloud (E2EE khi người dùng bật Advanced Data Protection, BR-ONB-10).
+
 - Version: **1.0-draft** (01/11/2026)
 - Kiểm bằng: `TestVectors/envelope/*.json`, `TestVectors/recovery-code/*.json`, `reference/lifeos_ref/crypto.py` (dùng thư viện `cryptography` của Python làm oracle).
 - Quyết định nền: ADR-0006. Mối đe doạ: `docs/engineering/threat-model.md`.

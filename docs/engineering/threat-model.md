@@ -1,5 +1,7 @@
 # Threat model (v1)
 
+> **MVP (ADR-0016):** chưa có mã hoá tự làm. Với kẻ tấn công đọc được iCloud (không bật Advanced Data Protection), dữ liệu MVP **không** được che. Các biện pháp crypto bên dưới áp dụng từ LOS-075. Biện pháp vẫn áp dụng trong MVP: không log nội dung, Data Protection trên máy, khoá app bằng Face ID.
+
 Tài sản: nội dung nhật ký, tâm trạng, thu chi, việc; khoá chủ MK; mã khôi phục RC.
 
 | # | Mối đe doạ | Có bảo vệ? | Bằng cách |

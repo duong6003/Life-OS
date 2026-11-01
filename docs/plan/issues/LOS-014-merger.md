@@ -1,7 +1,7 @@
 ---
 id: LOS-014
 title: "SyncCore: Merger thuần"
-milestone: "M1 Lõi dữ liệu cục bộ"
+milestone: "M6 Sau MVP"
 labels: [type:feature, area:sync, agent-ok]
 depends_on: [LOS-012]
 size: M

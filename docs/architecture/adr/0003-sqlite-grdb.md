@@ -1,6 +1,6 @@
 # ADR-0003: SQLite qua GRDB 7, quy tắc schema đồng bộ được
 
-- Trạng thái: Chấp nhận
+- Trạng thái: Chấp nhận; sửa đổi bởi ADR-0016 (truy cập qua SQLiteData, schema theo luật SyncEngine)
 - Liên quan: data-model.md, ADR-0004, ADR-0014
 
 ## Bối cảnh

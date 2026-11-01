@@ -1,9 +1,9 @@
 ---
 id: LOS-006
 title: "Chuyển bảng ký tự mã khôi phục sang CryptoCore"
-milestone: "M0 Nền móng"
+milestone: "M6 Sau MVP"
 labels: [type:chore, area:crypto, agent-ok]
-depends_on: [LOS-002]
+depends_on: [LOS-065]
 size: S
 ---
 
@@ -23,4 +23,4 @@ DesignSystem không chứa logic mã khôi phục; RecoveryKeyView nhận dữ l
 - SPEC-crypto §3
 
 ## Phụ thuộc
-LOS-002
+LOS-065

@@ -1,6 +1,6 @@
 # Cấu trúc module, thư mục và quy tắc tạo file
 
-Theo ADR-0007, ADR-0008. Đây là luật, không phải gợi ý: agent tạo file sai chỗ thì PR bị trả lại.
+Theo ADR-0007, ADR-0008, ADR-0016. Đây là luật, không phải gợi ý: agent tạo file sai chỗ thì PR bị trả lại.
 
 ## 1. Cây thư mục đầy đủ
 
@@ -25,30 +25,34 @@ Packages/
         Rules/                   Hàm thuần cho business rule: Streak, BudgetStatus, TodaySelection, OverdueRule
         Errors/                  DomainError
       Capture/                   QuickCaptureParser, AmountParser, DateTokenParser, VietnameseText (bỏ dấu)
-      SyncCore/
+      SyncCore/                  ── SAU MVP (ADR-0016, LOS-075): đồng bộ mã hoá tự làm ──
         Clock/                   HybridLogicalClock, HLCTimestamp
         Model/                   FieldChange, RowState, SyncTableSchema, MergePolicy
         Merge/                   Merger (thuần, có test vector)
         Transport/               SyncTransport (protocol), TransportEvent
         Coordinator/             SyncCoordinator (actor), SyncStatus
-      CryptoCore/
+      CryptoCore/                ── SAU MVP ──
         CryptoProvider.swift     protocol: seal/open AEAD, hkdf, random
         Envelope/                EnvelopeCodec (LOS1)
         Keys/                    KeyVault, KeyBundle, KeyID, RecoveryCode (bảng 23 ký tự)
-      Persistence/
-        Database/                DatabaseFactory, AppDatabase (DatabasePool), Pragmas
-        Migrations/              M0001_Initial.swift, M0002_….swift (chỉ thêm)
-        Records/                 TaskRecord, HabitRecord… (GRDB FetchableRecord/PersistableRecord)
-        Repositories/            protocol + GRDB impl: TaskRepository, HabitRepository…
-        Queries/                 TodayQuery, UpcomingTasksQuery, MonthSpendingQuery… (trả snapshot)
-        Sync/                    SyncWriter, OutboxStore, FieldClockStore, SyncSchemaRegistry
       TestSupport/               (chỉ dùng trong test) FixedClock, InMemoryDatabase, FakeTransport, VectorLoader, Fixtures
     Tests/
-      DomainTests/ CaptureTests/ SyncCoreTests/ CryptoCoreTests/ PersistenceTests/
+      DomainTests/ CaptureTests/ SyncCoreTests/ CryptoCoreTests/
+  LifeOSData/                    Chỉ Apple. SQLiteData + GRDB (ADR-0016).
+    Sources/
+      Persistence/
+        Database/                AppDatabase (DatabasePool, WAL, attachMetadatabase), Pragmas
+        Migrations/              M0001_Initial.swift chạy sql/0001_initial.sql; M0002_… (chỉ thêm)
+        Tables/                  TaskRow, HabitRow… (`@Table` của SQLiteData), ánh xạ 2 chiều với entity Domain
+        Repositories/            protocol + cài đặt SQLite: TaskRepository / SQLiteTaskRepository…
+        Queries/                 TodayQuery, UpcomingTasksQuery, MonthSpendingQuery… (trả snapshot)
+      CloudSync/                 CloudSync.makeEngine, SyncTables, SyncStatusMonitor. NƠI DUY NHẤT nhắc SyncEngine.
+    Tests/
+      PersistenceTests/          DB tạm thật; CloudSyncTests/ (TC-SYNC-15, chạy trên macOS)
   LifeOSPlatform/                Chỉ Apple.
     Sources/
-      CryptoApple/               CryptoKitProvider: CryptoProvider; KeychainStore
-      CloudKitTransport/         CloudKitSyncTransport: SyncTransport (CKSyncEngine), RecordMapper
+      CryptoApple/               (sau MVP) CryptoKitProvider: CryptoProvider; KeychainStore
+      CloudKitTransport/         (sau MVP) CloudKitSyncTransport: SyncTransport (CKSyncEngine), RecordMapper
       PlatformServices/          NotificationScheduler, BackgroundTasks, AppLock (LocalAuthentication), Metrics (MetricKit), Haptics?
     Tests/
   LifeOSDesignSystem/            Đã có. Token sinh tự động + component.
@@ -76,9 +80,10 @@ flowchart BT
   Capture --> Domain
   SyncCore --> Domain
   CryptoCore --> Domain
-  Persistence --> SyncCore
   Persistence --> Domain
-  Persistence --> GRDB[(GRDB)]
+  Persistence --> SQLiteData[(SQLiteData + GRDB)]
+  CloudSync --> Persistence
+  CloudSync --> SQLiteData
   CryptoApple --> CryptoCore
   CloudKitTransport --> SyncCore
   CloudKitTransport --> CryptoCore
@@ -92,12 +97,11 @@ flowchart BT
   CaptureFeature --> FeatureSupport
   AppFeature --> XFeature
   AppFeature --> CaptureFeature
-  AppFeature --> CryptoApple
-  AppFeature --> CloudKitTransport
+  AppFeature --> CloudSync
   AppFeature --> PlatformServices
 ```
 
-Feature được import `Persistence` để lấy **protocol repository và kiểu snapshot**, không được tạo `DatabasePool`. Chỉ `AppFeature` tạo cài đặt cụ thể.
+Feature được import `Persistence` để lấy **protocol repository và kiểu snapshot**, không được tạo `DatabasePool`, không dùng `@FetchAll`/`@FetchOne` trong View (ADR-0016 ranh giới 3). Chỉ `AppFeature` tạo cài đặt cụ thể và gọi `CloudSync`. `CryptoApple`, `CloudKitTransport`, `SyncCore`, `CryptoCore` chưa được nối trong MVP (LOS-075).
 
 ## 3. Bên trong một Feature target
 
@@ -121,13 +125,14 @@ TasksFeature/
 |---|---|---|---|
 | Entity mới | `Domain/Model/` | `<Thing>.swift`, `struct <Thing>: Sendable, Hashable, Identifiable` | Cập nhật data-model.md |
 | Quy tắc nghiệp vụ | `Domain/Rules/` | `<Rule>.swift`, hàm `static` thuần | Test có `BR-xxx` trong tên/comment |
-| Bảng mới / cột mới | `Persistence/Migrations/` | `M<NNNN>_<Mô tả>.swift` | Đăng ký trong `SyncSchemaRegistry`, test migration từ DB phiên bản trước |
-| Record GRDB | `Persistence/Records/` | `<Thing>Record.swift` | Ánh xạ 2 chiều với entity |
+| Bảng mới / cột mới | `schema/` + `LifeOSData/…/Persistence/Migrations/` | `M<NNNN>_<Mô tả>.swift` + `NNNN_<mô tả>.sql` | Theo luật SyncEngine (header schema), thêm vào `SyncTables` nếu đồng bộ, test migration từ DB phiên bản trước |
+| Bảng `@Table` | `Persistence/Tables/` | `<Thing>Row.swift` | Ánh xạ 2 chiều với entity |
 | Truy vấn cho màn | `Persistence/Queries/` | `<Screen><Thing>Query.swift` trả `<…>Snapshot` | Index nếu lọc/sắp xếp; test với DB seed |
-| Repository | `Persistence/Repositories/` | `protocol <Thing>Repository` + `GRDB<Thing>Repository` | Mọi ghi qua `SyncWriter` |
+| Repository | `Persistence/Repositories/` | `protocol <Thing>Repository` + `SQLite<Thing>Repository` | Ghi `updated_at`; xoá = đặt `deleted_at` |
 | Màn mới | `LifeOSFeatures/Sources/<X>Feature/` | `<Name>Screen`, `<Name>Store` | Preview, chuỗi trong xcstrings, test store, spec màn trong `docs/design/screens/` |
 | Component dùng chung | `LifeOSDesignSystem/.../Components/` | `<Name>.swift` | Thêm vào `Catalog.swift`, nhãn VoiceOver |
-| Adapter Apple | `LifeOSPlatform/Sources/<Module>/` | `<Tech><Protocol>` (vd. `CloudKitSyncTransport`) | Protocol phải nằm ở Core trước |
+| Adapter Apple | `LifeOSPlatform/Sources/<Module>/` | `<Tech><Protocol>` (vd. `NotificationScheduler`) | Protocol phải nằm ở Core trước |
+| Đổi gì về đồng bộ | `LifeOSData/Sources/CloudSync/` | — | Không chỗ nào khác được nhắc SyncEngine (TC-SYNC-14) |
 | Thay đổi định dạng trên dây | `docs/specs/` trước | — | Tăng version spec, test vector mới, code tham chiếu Python |
 | Quyết định kiến trúc | `docs/architecture/adr/` | `NNNN-<slug>.md` | Cập nhật bảng ADR README |
 

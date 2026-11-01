@@ -5,7 +5,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 ISSUES = ROOT / "docs" / "plan" / "issues"
-MILESTONES = ["M0 Nền móng", "M1 Lõi dữ liệu cục bộ", "M2 MVP cục bộ", "M3 Bắt đầu và khôi phục",
+MILESTONES = ["M0 Nền móng", "M1 Lõi dữ liệu cục bộ", "M2 MVP cục bộ", "M3 Bắt đầu",
               "M4 Đồng bộ iCloud", "M5 Hoàn thiện và beta", "M6 Sau MVP"]
 
 

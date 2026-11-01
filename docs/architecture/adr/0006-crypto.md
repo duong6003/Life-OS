@@ -1,6 +1,6 @@
 # ADR-0006: Mã hoá bằng CryptoKit, envelope có version, khoá chủ + mã khôi phục
 
-- Trạng thái: Chấp nhận
+- Trạng thái: Hoãn tới sau MVP bởi ADR-0016 (LOS-075)
 - Liên quan: SPEC-crypto, threat-model.md, BR-ONB-*
 
 ## Bối cảnh

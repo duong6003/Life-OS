@@ -1,9 +1,9 @@
 ---
 id: LOS-012
 title: "SyncCore: Hybrid Logical Clock"
-milestone: "M1 Lõi dữ liệu cục bộ"
+milestone: "M6 Sau MVP"
 labels: [type:feature, area:sync, agent-ok]
-depends_on: [LOS-010]
+depends_on: [LOS-065]
 size: S
 ---
 
@@ -23,4 +23,4 @@ HLC đúng SPEC-sync §2, qua mọi vector.
 - ADR-0004
 
 ## Phụ thuộc
-LOS-010
+LOS-065

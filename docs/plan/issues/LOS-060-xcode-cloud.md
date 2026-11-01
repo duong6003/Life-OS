@@ -13,6 +13,7 @@ Mỗi PR build app + test; nhánh main đẩy TestFlight.
 ## Việc cần làm
 - [ ] Workflow PR: build iOS/macOS + unit + store test
 - [ ] Workflow main: archive → TestFlight nội bộ
+- [ ] Bước post-build: `periphery scan` (strict) và `swiftlint analyze` (unused_import, unused_declaration)
 
 ## Tiêu chí nghiệm thu
 - [ ] PR hiện check Xcode Cloud

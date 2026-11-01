@@ -1,0 +1,10 @@
+# Periphery (peripheryapp/periphery): tìm code, tham số, `public` không ai dùng — thứ agent hay để lại.
+# Chỉ chạy trên macOS, sau khi có App/LifeOS.xcodeproj (LOS-003). Cài: brew install periphery
+# Chạy: periphery scan        (Xcode Cloud chạy ở bước post-build, LOS-060)
+project: App/LifeOS.xcodeproj
+schemes:
+  - LifeOS
+retain_public: false            # app không phải thư viện: `public` thừa cũng bị báo
+retain_swift_ui_previews: true  # #Preview không tính là code thừa
+relative_results: true
+strict: true                    # có kết quả = thất bại

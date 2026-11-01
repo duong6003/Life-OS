@@ -1,0 +1,154 @@
+# SwiftLint (realm/SwiftLint, ghim 0.65.1). Định dạng do swift-format lo (.swift-format); SwiftLint lo chất lượng.
+# Chạy: swiftlint lint --strict   (CI và lefthook dùng đúng lệnh này)
+# Đổi luật = sửa file này + docs/engineering/code-quality.md trong cùng PR. Không tắt luật bằng `// swiftlint:disable`
+# trừ khi có comment lý do ngay cạnh (luật `blanket_disable_command` bắt kiểu tắt cả file).
+
+included:
+  - Packages
+  - App
+excluded:
+  - "**/.build"
+  - "**/Generated"
+  - "**/*.xcassets"
+  - Packages/LifeOSDesignSystem/Sources/DesignSystem/Generated
+
+# Tắt các luật đụng việc của swift-format để hai công cụ không cãi nhau.
+disabled_rules:
+  - trailing_comma
+  - opening_brace
+  - vertical_parameter_alignment
+  - todo                     # TODO được phép nếu kèm mã issue: luật riêng `todo_needs_issue` bên dưới
+
+opt_in_rules:
+  # An toàn (khớp CLAUDE.md luật 9)
+  - force_unwrapping
+  - implicitly_unwrapped_optional
+  - fatal_error_message
+  - discouraged_optional_boolean
+  - discouraged_optional_collection
+  # Hiệu năng
+  - contains_over_filter_count
+  - contains_over_filter_is_empty
+  - contains_over_first_not_nil
+  - empty_count
+  - first_where
+  - last_where
+  - flatmap_over_map_reduce
+  - reduce_into
+  - sorted_first_last
+  - empty_string
+  # Rõ ràng, dễ bảo trì
+  - private_swiftui_state
+  - private_over_fileprivate
+  - explicit_init
+  - redundant_nil_coalescing
+  - redundant_type_annotation
+  - unneeded_parentheses_in_closure_argument
+  - toggle_bool
+  - prefer_self_in_static_references
+  - closure_spacing
+  - convenience_type
+  - fallthrough
+  - identical_operands
+  - multiline_parameters
+  - overridden_super_call
+  - yoda_condition
+  - blanket_disable_command
+  - accessibility_label_for_image
+  - accessibility_trait_for_button
+
+analyzer_rules:              # chạy bằng `swiftlint analyze` trên macOS sau khi có xcodeproj (LOS-003)
+  - unused_import
+  - unused_declaration
+
+line_length:
+  warning: 120
+  error: 140
+  ignores_comments: true
+  ignores_urls: true
+file_length:
+  warning: 300
+  error: 500
+type_body_length:
+  warning: 200
+  error: 300
+function_body_length:
+  warning: 40
+  error: 80
+cyclomatic_complexity:
+  warning: 10
+  error: 15
+nesting:
+  type_level: 2
+function_parameter_count:
+  warning: 5
+  error: 7
+identifier_name:
+  min_length: 2
+  excluded: [id, x, y, i, db, ok, at, to]
+large_tuple:
+  warning: 3
+
+custom_rules:
+  no_any_view:
+    name: "Không AnyView"
+    regex: '\bAnyView\b'
+    message: "Dùng @ViewBuilder hoặc generic thay AnyView (CLAUDE.md luật 9, hiệu năng)."
+    severity: error
+  no_try_force:
+    name: "Không try! ngoài test"
+    regex: '\btry!'
+    excluded: '.*Tests?/.*'
+    message: "Ném lỗi có kiểu thay vì try! (CLAUDE.md luật 9)."
+    severity: error
+  no_repeat_forever:
+    name: "Không animation lặp vô hạn"
+    regex: '\.repeatForever\('
+    message: "Tốn pin; xem performance-budget.md."
+    severity: error
+  no_timeline_animation:
+    name: "Không TimelineView(.animation)"
+    regex: 'TimelineView\(\s*\.animation'
+    message: "Vẽ lại mỗi khung hình; xem performance-budget.md."
+    severity: error
+  no_formatter_in_body:
+    name: "Không tạo formatter tại chỗ"
+    regex: '\b(DateFormatter|NumberFormatter|MeasurementFormatter|RelativeDateTimeFormatter)\(\)'
+    excluded: '.*/FeatureSupport/FormatterCache\.swift'
+    message: "Lấy từ FormatterCache; dùng .formatted() cho trường hợp đơn giản."
+    severity: error
+  no_shared_singleton:
+    name: "Không singleton toàn cục"
+    regex: 'static\s+(let|var)\s+shared\b'
+    message: "Tiêm phụ thuộc qua init (ADR-0007)."
+    severity: error
+  no_print:
+    name: "Không print"
+    regex: '^\s*(print|debugPrint|dump)\('
+    excluded: '.*Tests?/.*'
+    message: "Dùng LogSink/Logger, và không bao giờ log nội dung người dùng (CLAUDE.md luật 5)."
+    severity: error
+  no_user_defaults_for_data:
+    name: "Không UserDefaults cho dữ liệu"
+    regex: 'UserDefaults\.standard'
+    message: "Dữ liệu người dùng nằm trong SQLite; cài đặt riêng máy ở bảng local_setting."
+    severity: warning
+  no_sync_engine_outside_cloudsync:
+    name: "SyncEngine chỉ ở CloudSync"
+    regex: '\bSyncEngine\b'
+    excluded: '.*/(CloudSync|AppFeature)/.*'
+    message: "ADR-0016 ranh giới 2."
+    severity: error
+  no_fetch_all_in_features:
+    name: "Feature không dùng @FetchAll/@FetchOne"
+    regex: '@Fetch(All|One)?\b'
+    included: '.*/LifeOSFeatures/.*'
+    message: "Đọc qua repository của Persistence (ADR-0016 ranh giới 3)."
+    severity: error
+  todo_needs_issue:
+    name: "TODO phải có mã issue"
+    regex: '(TODO|FIXME)(?!\(LOS-\d{3}\))'
+    message: "Viết TODO(LOS-xxx): …"
+    severity: warning
+
+reporter: "xcode"

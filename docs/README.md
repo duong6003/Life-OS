@@ -7,7 +7,7 @@ Mọi tài liệu viết tiếng Việt; tên trong code viết tiếng Anh. Tà
 | `product/` | Phạm vi MVP, thuật ngữ, **business rules** (BR-xxx) | Khi đổi hành vi người dùng thấy |
 | `architecture/` | System design (sơ đồ), cấu trúc module, mô hình dữ liệu, **ADR** | Khi đổi cấu trúc; quyết định mới = ADR mới |
 | `specs/` | SPEC-sync, SPEC-crypto, SPEC-quick-capture: đủ chi tiết để viết lại bằng Kotlin | Đổi spec = tăng version + cập nhật test vector |
-| `engineering/` | Quy ước code, testing, quy trình git/PR/CI, ngân sách hiệu năng, threat model | Khi đổi cách làm việc |
+| `engineering/` | Quy ước code, chất lượng code (SwiftLint, Periphery, skill agent), testing, quy trình git/PR/CI, ngân sách hiệu năng, threat model | Khi đổi cách làm việc |
 | `design/` | Quy trình thiết kế: design nằm ở đâu, lấy thế nào, khi nào dùng Claude | Khi đổi công cụ |
 | `plan/` | Graph phụ thuộc + từng issue (nguồn để tạo GitHub Issues) | Khi thêm/bỏ hạng mục |
 | `test-cases/` | Test case theo module (TC-xxx), ánh xạ tới BR-xxx | Cùng PR với tính năng |

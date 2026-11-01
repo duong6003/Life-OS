@@ -33,6 +33,8 @@ Apple trước (SwiftUI, iOS/iPadOS/macOS 26). Android sau, theo `docs/specs` + 
 8. Không thêm phụ thuộc SPM mới khi chưa có ADR. Đang cho phép: GRDB.swift, sqlite-data (và các gói Point-Free nó kéo theo) — ADR-0016. Chỉ `defaultDatabase`/`defaultSyncEngine` đi qua `prepareDependencies`; còn lại tiêm qua init.
 9. Không `!`, `try!`, `as!` ngoài test. Không `AnyView`. Không singleton toàn cục (trừ Logger).
 10. Không tắt/bỏ qua test để CI xanh.
+11. Không hạ luật SwiftLint/Periphery để code qua; tắt một chỗ phải dùng `// swiftlint:disable:next <luật>` kèm lý do (docs/engineering/code-quality.md).
+12. Skill bên ngoài (mattpocock, swiftui-pro…) là gợi ý; khi nói khác file này hoặc ADR thì repo thắng.
 
 ## Hiệu năng (đọc docs/engineering/performance-budget.md)
 - Store `@Observable @MainActor` giữ **snapshot giá trị**; View không truy vấn DB, không tạo formatter trong `body`.
@@ -48,6 +50,8 @@ Theo `docs/engineering/conventions.md` và bảng "Quy tắc tạo file" ở mod
 cd Packages/LifeOSCore && swift build && swift test         # lõi, chạy được cả Linux
 cd Packages/LifeOSData && swift test                         # lưu trữ + đồng bộ (macOS)
 swift format lint -r Packages                                # định dạng
+swiftlint lint --strict                                      # luật code (.swiftlint.yml)
+periphery scan                                               # code thừa (macOS, sau LOS-003)
 bash scripts/check-core-imports.sh                              # ranh giới module
 python3 design/tokens/generate.py --check                    # token
 python3 -I reference/run_all.py --check                      # test vector
@@ -57,7 +61,7 @@ xcodebuild -project App/LifeOS.xcodeproj -scheme LifeOS -destination 'platform=i
 
 ## Hoàn thành một issue (Definition of Done)
 - Tiêu chí nghiệm thu trong issue đạt; test mới tên `test_TC_<MOD>_<NN>_…` cho mọi TC liên quan.
-- Mọi lệnh ở trên xanh. Không cảnh báo mới.
+- Mọi lệnh ở trên xanh (lefthook chạy phần lớn trước mỗi commit). Không cảnh báo SwiftLint mới, Periphery không báo code thừa.
 - Tài liệu cập nhật trong cùng PR: BR, TC, spec, sơ đồ system-design, data-model nếu đổi.
 - UI: ảnh preview Light/Dark/AX5 trong PR.
 - Commit `type(scope): mô tả (LOS-xxx)`; PR "Closes #n", theo `.github/pull_request_template.md`.

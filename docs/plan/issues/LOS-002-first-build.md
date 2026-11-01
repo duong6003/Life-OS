@@ -11,16 +11,16 @@ size: M
 Mọi gói trong Packages/ build được bằng Xcode 26.x; LifeOSCore `swift test` xanh (kể cả trên Linux).
 
 ## Việc cần làm
-- [ ] `cd Packages/LifeOSCore && swift build && swift test`
-- [ ] `cd Packages/LifeOSData && swift build` (kéo sqlite-data; nếu Xcode quá cũ so với swift-tools của sqlite-data thì ghi lại cho LOS-021)
-- [ ] Mở Packages/LifeOSDesignSystem trong Xcode, build iOS + macOS, sửa API lệch (lineHeight(.multiple), glassEffect, tabViewBottomAccessory, tabBarMinimizeBehavior, @Entry)
-- [ ] Ghim sqlite-data + GRDB trong Package.resolved, commit
-- [ ] Ghi các API phải sửa vào HANDOFF.md §5c
+- [x] `cd Packages/LifeOSCore && swift build && swift test`
+- [x] `cd Packages/LifeOSData && swift build` (kéo sqlite-data; nếu Xcode quá cũ so với swift-tools của sqlite-data thì ghi lại cho LOS-021)
+- [x] Mở Packages/LifeOSDesignSystem trong Xcode, build iOS + macOS, sửa API lệch (lineHeight(.multiple), glassEffect, tabViewBottomAccessory, tabBarMinimizeBehavior, @Entry)
+- [x] Ghim sqlite-data + GRDB trong Package.resolved, commit
+- [x] Ghi các API phải sửa vào HANDOFF.md §5c
 
 ## Tiêu chí nghiệm thu
-- [ ] 0 lỗi, 0 cảnh báo mới
+- [x] 0 lỗi, 0 cảnh báo mới
 - [ ] Catalog.swift preview chạy Light/Dark
-- [ ] Package.resolved có trong git
+- [x] Package.resolved có trong git
 
 ## Tham chiếu
 - ADR-0008

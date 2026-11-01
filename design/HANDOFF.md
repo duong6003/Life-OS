@@ -148,6 +148,14 @@ apple/LifeOSDesignSystem/
 - Ô thói quen bỏ viền (nền phẳng); nhãn ngân sách trên biểu đồ cột không chồng cột; biểu tượng lớn ở Máy mới, Lỗi dữ liệu, Chưa bật iCloud bỏ khung tròn.
 - Từ ngữ: “Mood” → “Tâm trạng”; tab và thanh bên đều là “Việc”; giữ Inbox, Check-in, Review tuần. Chỉ báo đồng bộ khi chưa đăng nhập: “Chưa đăng nhập iCloud · vẫn lưu trong máy”.
 
+## 5c. Build lần đầu (LOS-002, 1/11)
+
+Máy: macOS 27.2, Xcode 27.2 (27B52), Swift 6.4.2. Cả 5 gói build sạch cho iOS Simulator và macOS (0 lỗi, 0 cảnh báo); `swift test` xanh ở LifeOSCore, LifeOSData, LifeOSPlatform, LifeOSFeatures.
+
+- **Không API nào phải sửa.** `lineHeight(.multiple(factor:))`, `glassEffect(_:in:)`, `@Entry` biên dịch đúng như đang viết. `tabViewBottomAccessory` và `tabBarMinimizeBehavior` hiện chỉ có trong doc comment của `QuickCaptureBar`; kiểm lại khi AppFeature dùng thật.
+- **Macro của gói Point-Free** (swift-perception, swift-structured-queries) phải được tin cậy: trong Xcode bấm "Trust & Enable" lần đầu; dòng lệnh `xcodebuild` cần `-skipMacroValidation` (cần cho CI ở LOS-003). `swift build`/`swift test` không cần.
+- Ghim trong `Package.resolved` (LifeOSData, LifeOSFeatures): sqlite-data 1.12.1, GRDB.swift 7.11.1.
+
 ## 6. Để giai đoạn sau
 
 - Widget và Control Center (mục 12). Token đã có sẵn chỗ cho widget: nền đặc, không kính tự làm.

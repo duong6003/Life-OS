@@ -41,14 +41,23 @@ public struct EnergyPicker: View {
                     .foregroundStyle(isOn ? LifeOSColor.text : LifeOSColor.text2)
                 Group {
                     if vertical {
-                        HStack(spacing: Space.s3) { bars; label; Spacer(minLength: 0) }
+                        HStack(spacing: Space.s3) {
+                            bars
+                            label
+                            Spacer(minLength: 0)
+                        }
                     } else {
-                        VStack(spacing: Space.s1) { bars; label.lineLimit(2).multilineTextAlignment(.center) }
+                        VStack(spacing: Space.s1) {
+                            bars
+                            label.lineLimit(2).multilineTextAlignment(.center)
+                        }
                     }
                 }
                 .padding(Space.s2)
                 .frame(maxWidth: .infinity, minHeight: Layout.hit)
-                .background(isOn ? LifeOSColor.accentSoft : .clear, in: .rect(cornerRadius: Radius.md, style: .continuous))
+                .background(
+                    isOn ? LifeOSColor.accentSoft : .clear, in: .rect(cornerRadius: Radius.md, style: .continuous)
+                )
                 .contentShape(.rect(cornerRadius: Radius.md, style: .continuous))
             }
             .buttonStyle(.plain)

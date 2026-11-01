@@ -30,7 +30,8 @@ public enum SyncState: Equatable, Sendable {
         case .synced: "Mọi thay đổi đã có trên các thiết bị của bạn."
         case .syncing: "Đang gửi và nhận thay đổi."
         case .pending: "Đã lưu trong máy. Sẽ đồng bộ khi có mạng."
-        case .iCloudSignedOut: "Dữ liệu vẫn lưu trong máy này. Đăng nhập iCloud trong Cài đặt để dùng trên thiết bị khác."
+        case .iCloudSignedOut:
+            "Dữ liệu vẫn lưu trong máy này. Đăng nhập iCloud trong Cài đặt để dùng trên thiết bị khác."
         case .iCloudFull: "Dữ liệu vẫn lưu trong máy này. Giải phóng dung lượng iCloud để đồng bộ tiếp."
         case .needsRecoveryKey: "Thiết bị này chưa có khóa để mở dữ liệu. Nhập mã khôi phục để tiếp tục."
         case .failed: "Dữ liệu vẫn lưu trong máy này. Life OS sẽ thử lại."
@@ -73,7 +74,7 @@ public struct SyncStatusBadge: View {
         }
         .lifeOSText(.footnote)
         .contentTransition(.opacity)
-            .accessibilityLabel(state.title)
-            .accessibilityHint(state.detail)
+        .accessibilityLabel(state.title)
+        .accessibilityHint(state.detail)
     }
 }

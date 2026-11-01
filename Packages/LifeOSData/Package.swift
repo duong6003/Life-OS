@@ -34,11 +34,13 @@ let package = Package(
                 .product(name: "SQLiteData", package: "sqlite-data"),
             ]
         ),
-        .testTarget(name: "PersistenceTests", dependencies: [
-            "Persistence",
-            .product(name: "TestSupport", package: "LifeOSCore"),
-            .product(name: "SQLiteDataTestSupport", package: "sqlite-data"),
-        ]),
+        .testTarget(
+            name: "PersistenceTests",
+            dependencies: [
+                "Persistence",
+                .product(name: "TestSupport", package: "LifeOSCore"),
+                .product(name: "SQLiteDataTestSupport", package: "sqlite-data"),
+            ]),
     ],
     swiftLanguageModes: [.v6]
 )

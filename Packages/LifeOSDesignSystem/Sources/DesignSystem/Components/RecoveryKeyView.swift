@@ -1,9 +1,10 @@
 import SwiftUI
+
 #if canImport(UIKit)
-import UIKit
-import UniformTypeIdentifiers
+    import UIKit
+    import UniformTypeIdentifiers
 #elseif canImport(AppKit)
-import AppKit
+    import AppKit
 #endif
 
 /// Hiển thị mã khôi phục theo nhóm 4 ký tự, chữ đơn cách. VoiceOver đọc từng ký tự để người dùng chép tay không nhầm.
@@ -19,11 +20,13 @@ public struct RecoveryKeyView: View {
 
     private var groups: [String] {
         let chars = Array(RecoveryKeyAlphabet.normalize(key))
-        return stride(from: 0, to: chars.count, by: 4).map { String(chars[$0 ..< min($0 + 4, chars.count)]) }
+        return stride(from: 0, to: chars.count, by: 4).map { String(chars[$0..<min($0 + 4, chars.count)]) }
     }
 
     public var body: some View {
-        let lines = stride(from: 0, to: groups.count, by: 4).map { groups[$0 ..< min($0 + 4, groups.count)].joined(separator: "  ") }
+        let lines = stride(from: 0, to: groups.count, by: 4).map {
+            groups[$0..<min($0 + 4, groups.count)].joined(separator: "  ")
+        }
         VStack(alignment: .leading, spacing: Space.s2) {
             ForEach(lines, id: \.self) { line in
                 Text(line)
@@ -81,20 +84,20 @@ public struct RecoveryKeyCopyButton: View {
 
     static func copyLocally(_ text: String) {
         #if canImport(UIKit)
-        UIPasteboard.general.setItems(
-            [[UTType.plainText.identifier: text]],
-            options: [.localOnly: true, .expirationDate: Date().addingTimeInterval(lifetime)]
-        )
+            UIPasteboard.general.setItems(
+                [[UTType.plainText.identifier: text]],
+                options: [.localOnly: true, .expirationDate: Date().addingTimeInterval(lifetime)]
+            )
         #elseif canImport(AppKit)
-        let pb = NSPasteboard.general
-        pb.clearContents()
-        pb.setString(text, forType: .string)
-        // Quy ước của các trình quản lý clipboard: không lưu lịch sử mục này.
-        pb.setString("", forType: NSPasteboard.PasteboardType("org.nspasteboard.ConcealedType"))
-        let count = pb.changeCount
-        DispatchQueue.main.asyncAfter(deadline: .now() + lifetime) {
-            if pb.changeCount == count { pb.clearContents() }
-        }
+            let pb = NSPasteboard.general
+            pb.clearContents()
+            pb.setString(text, forType: .string)
+            // Quy ước của các trình quản lý clipboard: không lưu lịch sử mục này.
+            pb.setString("", forType: NSPasteboard.PasteboardType("org.nspasteboard.ConcealedType"))
+            let count = pb.changeCount
+            DispatchQueue.main.asyncAfter(deadline: .now() + lifetime) {
+                if pb.changeCount == count { pb.clearContents() }
+            }
         #endif
     }
 }

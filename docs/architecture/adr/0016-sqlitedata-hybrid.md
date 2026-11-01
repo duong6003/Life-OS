@@ -21,7 +21,7 @@ Trong MVP, Life OS dùng SQLiteData cho lưu trữ, theo dõi dữ liệu và đ
 
 1. **Schema vẫn là SQL trung lập** ở `schema/`. Không có cột hay bảng riêng của CloudKit trong bảng nghiệp vụ. Siêu dữ liệu đồng bộ nằm trong metadatabase riêng của SQLiteData.
 2. **Chỉ target `CloudSync`** (gói `LifeOSData`) được nhắc tới `SyncEngine`. `AppFeature` gọi nó đúng một chỗ. Persistence, Feature và Domain không biết đồng bộ là gì.
-3. **Feature đọc và ghi qua protocol repository** trong `Persistence`, không dùng `@FetchAll` trực tiếp trong View. Lý do: test store bằng repository giả, và giữ một chỗ duy nhất để thay cách theo dõi.
+3. **Feature đọc và ghi qua protocol repository** (port trong `Domain/Ports`, sửa bởi ADR-0017), không dùng `@FetchAll` trực tiếp trong View. Lý do: test store bằng repository giả, và giữ một chỗ duy nhất để thay cách theo dõi.
 4. **Lõi `LifeOSCore` vẫn build trên Linux**, gồm Domain, Capture, và SyncCore/CryptoCore cho giai đoạn sau. SQLiteData chỉ có ở gói `LifeOSData` dành cho Apple.
 
 Sau MVP (LOS-075), nếu cần mã hoá đầu-cuối mặc định hoặc làm Android, ta thay `CloudSync` bằng lớp tự làm theo SPEC-sync và SPEC-crypto. Lớp mới đọc cùng các bảng, rồi chuyển dữ liệu một lần sang zone mới. Đọc và ghi của các màn không phải sửa.

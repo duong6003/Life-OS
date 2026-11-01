@@ -1,4 +1,6 @@
+// swift-format-ignore-file
 // Sinh tự động từ design-tokens/tokens.json bởi design-tokens/generate.py. Đừng sửa tay.
+// swift-format bỏ qua file này: tên token (s0_5…) theo tokens.json, và định dạng lại sẽ làm --check báo cũ.
 
 import SwiftUI
 

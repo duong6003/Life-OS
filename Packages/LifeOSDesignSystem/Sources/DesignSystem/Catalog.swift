@@ -28,13 +28,19 @@ public struct DesignSystemCatalog: View {
                     }
                 }
                 .toggleStyle(TaskCheckboxStyle(priority: .high))
-                HabitTile(name: "Uống nước", detail: "2/3 cốc", symbol: "drop", tint: LifeOSColor.dataSky, progress: 2.0 / 3, isDone: $habitDone)
+                HabitTile(
+                    name: "Uống nước", detail: "2/3 cốc", symbol: "drop", tint: LifeOSColor.dataSky, progress: 2.0 / 3,
+                    isDone: $habitDone)
                 MoodPicker(selection: $mood)
                 EnergyPicker(selection: $energy)
                 WeekdayPicker(selection: $days)
-                QuickCaptureField(text: $capture, preview: CapturePreview(kind: .expense, summary: "Chi 45.000₫ · Ăn uống")) {}
+                QuickCaptureField(
+                    text: $capture, preview: CapturePreview(kind: .expense, summary: "Chi 45.000₫ · Ăn uống")
+                ) {}
                 HabitHeatmap(
-                    days: (0..<84).map { HabitHeatmap.Day(date: Date(timeIntervalSince1970: Double($0) * 86_400), level: $0 % 5) },
+                    days: (0..<84).map {
+                        HabitHeatmap.Day(date: Date(timeIntervalSince1970: Double($0) * 86_400), level: $0 % 5)
+                    },
                     tint: LifeOSColor.dataGreen,
                     summary: "Đi bộ: mẫu 12 tuần"
                 )

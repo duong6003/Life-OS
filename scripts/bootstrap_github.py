@@ -14,7 +14,7 @@ from plan_lib import ROOT, MILESTONES, load, validate  # noqa: E402
 
 MAP = ROOT / "scripts" / ".issue-map.json"
 RENAMED_MILESTONES = {"M3 Bắt đầu và khôi phục": "M3 Bắt đầu"}   # ADR-0016
-COLORS = {"type": "1f6feb", "area": "8957e5", "mod": "2da44e", "perf": "d29922", "agent-ok": "0e8a16", "needs-decision": "d93f0b"}
+COLORS = {"type": "1f6feb", "area": "8957e5", "mod": "2da44e", "perf": "d29922", "agent-ok": "0e8a16", "needs-decision": "d93f0b", "needs-triage": "fbca04", "ready-for-human": "c5def5"}
 
 
 def gh(*args: str, input: str | None = None, check: bool = True) -> str:

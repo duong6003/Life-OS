@@ -1,6 +1,6 @@
 # Quy ước code
 
-Swift 6.2+, **Swift 6 language mode, strict concurrency complete** ở mọi gói. Định dạng bằng `swift format` (có sẵn trong toolchain, cấu hình `.swift-format`); không thêm SwiftLint/SwiftFormat bên thứ ba.
+Swift 6.2+, **Swift 6 language mode, strict concurrency complete** ở mọi gói. Định dạng bằng `swift format` (có sẵn trong toolchain, cấu hình `.swift-format`). Luật chất lượng bằng SwiftLint và Periphery (docs/engineering/code-quality.md). Nguồn của các quy ước dưới: Swift API Design Guidelines, Google Swift Style Guide, Airbnb Swift Style Guide (docs/architecture/references.md: S-API, S-GOOG, S-AIRBNB).
 
 ## 1. Đặt tên
 | Thứ | Quy ước | Ví dụ |
@@ -21,7 +21,7 @@ Swift 6.2+, **Swift 6 language mode, strict concurrency complete** ở mọi gó
 Tên trong code tiếng Anh; comment được viết tiếng Việt, ngắn, giải thích **vì sao** (không nhắc lại code làm gì). Có mã tham chiếu thì ghi: `// BR-HAB-04`, `// SPEC-sync §6.3`.
 
 ## 2. File
-- Một type public chính mỗi file; tên file = tên type. Extension: `<Type>+<Mục đích>.swift`.
+- Một type public chính mỗi file; tên file = tên type. Extension: `<Type>+<Mục đích>.swift` [S-GOOG]. `scripts/check_structure.py` kiểm luật này.
 - Thứ tự trong file: thuộc tính → init → API public → private. Dùng `// MARK: -` khi file > 150 dòng.
 - File > 300 dòng là dấu hiệu tách. View `body` > 60 dòng → tách view con.
 - Không file `Utils/Helpers/Common`.

@@ -1,6 +1,10 @@
 # Cấu trúc module, thư mục và quy tắc tạo file
 
-Theo ADR-0007, ADR-0008, ADR-0016. Đây là luật, không phải gợi ý: agent tạo file sai chỗ thì PR bị trả lại.
+Theo ADR-0007, ADR-0008, ADR-0016, ADR-0017. Đây là luật, không phải gợi ý: agent tạo file sai chỗ thì PR bị trả lại.
+
+- Vì sao chia như vậy, và nguồn best practice của từng quy tắc: [overview.md](overview.md), [references.md](references.md).
+- Từng bước cho mỗi loại thay đổi: [recipes.md](recipes.md). Thứ đã có: [inventory.md](inventory.md).
+- Tạo file bằng `python3 scripts/new.py <loại> <Tên>`. Kiểm bằng `python3 -I scripts/check_structure.py` (chạy trong CI và lefthook). Danh sách thư mục được phép nằm trong bảng `ALLOWED` của script; muốn thêm thì sửa script và file này trong cùng PR, kèm ADR.
 
 ## 1. Cây thư mục đầy đủ
 
@@ -24,6 +28,8 @@ Packages/
         Values/                  LocalDate, LocalMonth, Money, Priority, Mood, Energy, EntityID
         Rules/                   Hàm thuần cho business rule: Streak, BudgetStatus, TodaySelection, OverdueRule
         Errors/                  DomainError
+        Ports/                   Protocol cho mọi thứ bên ngoài: TaskRepository, TodayReading, AppClock, LogSink, ReminderScheduling (ADR-0017)
+        ReadModels/              Snapshot đã định hình cho màn: TodaySnapshot, TaskGroupsSnapshot… (struct Sendable)
       Capture/                   QuickCaptureParser, AmountParser, DateTokenParser, VietnameseText (bỏ dấu)
       SyncCore/                  ── SAU MVP (ADR-0016, LOS-075): đồng bộ mã hoá tự làm ──
         Clock/                   HybridLogicalClock, HLCTimestamp
@@ -35,7 +41,9 @@ Packages/
         CryptoProvider.swift     protocol: seal/open AEAD, hkdf, random
         Envelope/                EnvelopeCodec (LOS1)
         Keys/                    KeyVault, KeyBundle, KeyID, RecoveryCode (bảng 23 ký tự)
-      TestSupport/               (chỉ dùng trong test) FixedClock, InMemoryDatabase, FakeTransport, VectorLoader, Fixtures
+      TestSupport/               (chỉ dùng trong test và preview) VectorLoader
+        Fakes/                   Bản giả cho mọi port: FakeTaskRepository, FixedClock… (chạy Linux)
+        Fixtures/                Dữ liệu mẫu: Fixtures.tasks, Fixtures.today
     Tests/
       DomainTests/ CaptureTests/ SyncCoreTests/ CryptoCoreTests/
   LifeOSData/                    Chỉ Apple. SQLiteData + GRDB (ADR-0016).
@@ -44,8 +52,8 @@ Packages/
         Database/                AppDatabase (DatabasePool, WAL, attachMetadatabase), Pragmas
         Migrations/              M0001_Initial.swift chạy sql/0001_initial.sql; M0002_… (chỉ thêm)
         Tables/                  TaskRow, HabitRow… (`@Table` của SQLiteData), ánh xạ 2 chiều với entity Domain
-        Repositories/            protocol + cài đặt SQLite: TaskRepository / SQLiteTaskRepository…
-        Queries/                 TodayQuery, UpcomingTasksQuery, MonthSpendingQuery… (trả snapshot)
+        Repositories/            Adapter cài đặt port ghi: SQLiteTaskRepository: TaskRepository…
+        Queries/                 Adapter cài đặt port đọc: TodayQuery: TodayReading… (trả snapshot của Domain)
       CloudSync/                 CloudSync.makeEngine, SyncTables, SyncStatusMonitor. NƠI DUY NHẤT nhắc SyncEngine.
     Tests/
       PersistenceTests/          DB tạm thật; CloudSyncTests/ (TC-SYNC-15, chạy trên macOS)
@@ -63,13 +71,13 @@ Packages/
       TodayFeature/ TasksFeature/ HabitsFeature/ JournalFeature/ SpendingFeature/
       ReviewFeature/ CaptureFeature/ OnboardingFeature/ SettingsFeature/
     Tests/
-      <Feature>Tests/            Test store bằng repository giả
+      <Feature>Tests/            Test store bằng bản giả từ TestSupport/Fakes
 
 design/        tokens/, reference/ (HTML Screens, Library), HANDOFF.md
 docs/          xem docs/README.md
 TestVectors/   hlc/, merge/, quick-capture/, recovery-code/, envelope/  (JSON)
 reference/     Code tham chiếu Python sinh và kiểm test vector
-scripts/       bootstrap_github.py, plan_graph.py, check-core-imports.sh, check-mermaid.mjs
+scripts/       new.py (tạo file theo mẫu), check_structure.py, inventory.py, bootstrap_github.py, plan_graph.py, check-core-imports.sh, check-mermaid.mjs
 ```
 
 ## 2. Đồ thị phụ thuộc giữa target
@@ -92,16 +100,16 @@ flowchart BT
   FeatureSupport --> Domain
   FeatureSupport --> DesignSystem
   XFeature["TodayFeature … SettingsFeature"] --> FeatureSupport
-  XFeature --> Persistence
   CaptureFeature --> Capture
   CaptureFeature --> FeatureSupport
   AppFeature --> XFeature
   AppFeature --> CaptureFeature
+  AppFeature --> Persistence
   AppFeature --> CloudSync
   AppFeature --> PlatformServices
 ```
 
-Feature được import `Persistence` để lấy **protocol repository và kiểu snapshot**, không được tạo `DatabasePool`, không dùng `@FetchAll`/`@FetchOne` trong View (ADR-0016 ranh giới 3). Chỉ `AppFeature` tạo cài đặt cụ thể và gọi `CloudSync`. `CryptoApple`, `CloudKitTransport`, `SyncCore`, `CryptoCore` chưa được nối trong MVP (LOS-075).
+Feature **không** import `Persistence`: protocol repository nằm ở `Domain/Ports`, snapshot ở `Domain/ReadModels` (ADR-0017; phụ thuộc vào interface, không vào cài đặt [S-TMA] [S-CLEAN]). Không dùng `@FetchAll`/`@FetchOne` trong View (ADR-0016 ranh giới 3). Chỉ `AppFeature` import `Persistence`, tạo cài đặt cụ thể và gọi `CloudSync` [S-ROOT]. `CryptoApple`, `CloudKitTransport`, `SyncCore`, `CryptoCore` chưa được nối trong MVP (LOS-075).
 
 ## 3. Bên trong một Feature target
 
@@ -109,7 +117,7 @@ Feature được import `Persistence` để lấy **protocol repository và ki�
 TasksFeature/
   TasksScreen.swift          View gốc của màn (đặt tên <Name>Screen). Chỉ bố cục, gọi store.
   TasksStore.swift           @Observable @MainActor final class. Trạng thái + hành động.
-  TasksSnapshot.swift        (nếu không dùng thẳng snapshot từ Persistence/Queries)
+  TasksSnapshot.swift        (chỉ khi cần trạng thái dẫn xuất riêng; dữ liệu DB dùng snapshot của Domain/ReadModels)
   Components/
     TaskRowView.swift        View con; nhận struct giá trị, closure hành động.
     AddTaskSheet.swift
@@ -119,6 +127,8 @@ TasksFeature/
     TasksScreen+Previews.swift  #Preview với dữ liệu mẫu, Light/Dark, chữ AX5
 ```
 
+Gốc Feature chỉ chứa `<Name>Screen`, `<Name>Store`, `<Name>Snapshot` (và file `<X>Feature.swift` giữ chỗ). Mọi view khác vào `Components/`.
+
 ## 4. Quy tắc tạo file
 
 | Bạn cần | Đặt ở | Tên file / type | Bắt buộc kèm |
@@ -127,11 +137,11 @@ TasksFeature/
 | Quy tắc nghiệp vụ | `Domain/Rules/` | `<Rule>.swift`, hàm `static` thuần | Test có `BR-xxx` trong tên/comment |
 | Bảng mới / cột mới | `schema/` + `LifeOSData/…/Persistence/Migrations/` | `M<NNNN>_<Mô tả>.swift` + `NNNN_<mô tả>.sql` | Theo luật SyncEngine (header schema), thêm vào `SyncTables` nếu đồng bộ, test migration từ DB phiên bản trước |
 | Bảng `@Table` | `Persistence/Tables/` | `<Thing>Row.swift` | Ánh xạ 2 chiều với entity |
-| Truy vấn cho màn | `Persistence/Queries/` | `<Screen><Thing>Query.swift` trả `<…>Snapshot` | Index nếu lọc/sắp xếp; test với DB seed |
-| Repository | `Persistence/Repositories/` | `protocol <Thing>Repository` + `SQLite<Thing>Repository` | Ghi `updated_at`; xoá = đặt `deleted_at` |
+| Truy vấn cho màn | `Domain/ReadModels/` + `Domain/Ports/` + `Persistence/Queries/` | `<X>Snapshot`, `protocol <X>Reading`, `<X>Query` | Index nếu lọc/sắp xếp; test với DB seed (R5) |
+| Repository | `Domain/Ports/` + `TestSupport/Fakes/` + `Persistence/Repositories/` | `protocol <Thing>Repository`, `Fake<Thing>Repository`, `SQLite<Thing>Repository` | Ghi `updated_at`; xoá = đặt `deleted_at` (R4) |
 | Màn mới | `LifeOSFeatures/Sources/<X>Feature/` | `<Name>Screen`, `<Name>Store` | Preview, chuỗi trong xcstrings, test store, spec màn trong `docs/design/screens/` |
 | Component dùng chung | `LifeOSDesignSystem/.../Components/` | `<Name>.swift` | Thêm vào `Catalog.swift`, nhãn VoiceOver |
-| Adapter Apple | `LifeOSPlatform/Sources/<Module>/` | `<Tech><Protocol>` (vd. `NotificationScheduler`) | Protocol phải nằm ở Core trước |
+| Adapter Apple | `LifeOSPlatform/Sources/<Module>/` | `<Tech><Protocol>` (vd. `UserNotificationReminderScheduler`) | Port ở `Domain/Ports` và bản giả ở `TestSupport/Fakes` trước (R8) |
 | Đổi gì về đồng bộ | `LifeOSData/Sources/CloudSync/` | — | Không chỗ nào khác được nhắc SyncEngine (TC-SYNC-14) |
 | Thay đổi định dạng trên dây | `docs/specs/` trước | — | Tăng version spec, test vector mới, code tham chiếu Python |
 | Quyết định kiến trúc | `docs/architecture/adr/` | `NNNN-<slug>.md` | Cập nhật bảng ADR README |
@@ -142,8 +152,7 @@ Không được: tạo file `Utils.swift`, `Helpers.swift`, `Extensions.swift` c
 
 ```swift
 import Observation
-import Domain
-import Persistence
+import Domain          // port + snapshot; KHÔNG import Persistence (ADR-0017)
 
 @Observable @MainActor
 public final class TasksStore {

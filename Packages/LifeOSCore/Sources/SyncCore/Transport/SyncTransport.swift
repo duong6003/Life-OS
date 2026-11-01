@@ -17,9 +17,9 @@ public protocol SyncTransportDelegate: AnyObject, Sendable {
 }
 
 public struct OpaqueRecord: Sendable, Hashable {
-    public let name: String          // SPEC-sync §3.3 (HMAC)
-    public let keyID: String         // hex kid
-    public let payloadVersion: Int   // pv
+    public let name: String  // SPEC-sync §3.3 (HMAC)
+    public let keyID: String  // hex kid
+    public let payloadVersion: Int  // pv
     public let opaquePayload: [UInt8]
 
     public init(name: String, keyID: String, payloadVersion: Int, opaquePayload: [UInt8]) {

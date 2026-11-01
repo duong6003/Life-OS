@@ -26,7 +26,8 @@ public struct CryptoKitProvider: CryptoProvider {
         return Array(box.ciphertext) + Array(box.tag)
     }
 
-    public func chaChaPolyOpen(key: [UInt8], nonce: [UInt8], ciphertextAndTag: [UInt8], aad: [UInt8]) throws -> [UInt8] {
+    public func chaChaPolyOpen(key: [UInt8], nonce: [UInt8], ciphertextAndTag: [UInt8], aad: [UInt8]) throws -> [UInt8]
+    {
         guard ciphertextAndTag.count >= 16 else { throw CryptoError.tampered }
         do {
             let box = try ChaChaPoly.SealedBox(

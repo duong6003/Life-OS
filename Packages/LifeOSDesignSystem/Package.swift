@@ -6,9 +6,9 @@ let package = Package(
     defaultLocalization: "vi",
     platforms: [.iOS(.v26), .macOS(.v26)],
     products: [
-        .library(name: "DesignSystem", targets: ["DesignSystem"]),
+        .library(name: "DesignSystem", targets: ["DesignSystem"])
     ],
     targets: [
-        .target(name: "DesignSystem", resources: [.process("Resources")]),
+        .target(name: "DesignSystem", resources: [.process("Resources")])
     ]
 )

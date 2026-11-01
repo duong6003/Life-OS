@@ -20,7 +20,7 @@ disabled_rules:
   - todo                     # TODO được phép nếu kèm mã issue: luật riêng `todo_needs_issue` bên dưới
 
 opt_in_rules:
-  # An toàn (khớp CLAUDE.md luật 9)
+  # An toàn (khớp AGENTS.md luật 9)
   - force_unwrapping
   - implicitly_unwrapped_optional
   - fatal_error_message
@@ -93,13 +93,13 @@ custom_rules:
   no_any_view:
     name: "Không AnyView"
     regex: '\bAnyView\b'
-    message: "Dùng @ViewBuilder hoặc generic thay AnyView (CLAUDE.md luật 9, hiệu năng)."
+    message: "Dùng @ViewBuilder hoặc generic thay AnyView (AGENTS.md luật 9, hiệu năng)."
     severity: error
   no_try_force:
     name: "Không try! ngoài test"
     regex: '\btry!'
     excluded: '.*Tests?/.*'
-    message: "Ném lỗi có kiểu thay vì try! (CLAUDE.md luật 9)."
+    message: "Ném lỗi có kiểu thay vì try! (AGENTS.md luật 9)."
     severity: error
   no_repeat_forever:
     name: "Không animation lặp vô hạn"
@@ -126,7 +126,7 @@ custom_rules:
     name: "Không print"
     regex: '^\s*(print|debugPrint|dump)\('
     excluded: '.*Tests?/.*'
-    message: "Dùng LogSink/Logger, và không bao giờ log nội dung người dùng (CLAUDE.md luật 5)."
+    message: "Dùng LogSink/Logger, và không bao giờ log nội dung người dùng (AGENTS.md luật 5)."
     severity: error
   no_user_defaults_for_data:
     name: "Không UserDefaults cho dữ liệu"

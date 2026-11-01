@@ -45,9 +45,10 @@ stateDiagram-v2
 ## 5. Milestone = giai đoạn
 `M0 Nền móng` · `M1 Lõi dữ liệu cục bộ` · `M2 MVP cục bộ` · `M3 Bắt đầu` · `M4 Đồng bộ iCloud` · `M5 Hoàn thiện và beta` · `M6 Sau MVP`. Mỗi milestone kết thúc bằng một issue `type:gate` có số đo.
 
-## 6. Làm việc với Claude Code trên Mac
-- Mở Terminal tại thư mục repo, chạy `claude`. Agent đọc `CLAUDE.md` tự động.
-- Giao việc theo issue: `/implement-issue 12` (lệnh trong `.claude/commands/`). Agent tạo nhánh, code, chạy test, mở PR "Closes #12".
+## 6. Làm việc với agent (Codex hoặc Claude Code) trên Mac
+- Luật chung ở `AGENTS.md`; cách dùng từng công cụ và nguồn ở `docs/agents/README.md`; prompt dán sẵn ở `docs/agents/prompts.md`.
+- Codex: chạy `codex` ở thư mục repo, dán "Làm theo docs/agents/workflows/implement-issue.md cho LOS-012". Claude Code: chạy `claude`, gõ `/implement-issue LOS-012`. Hai cách chạy cùng một quy trình.
+- Agent tạo nhánh, code, chạy test, mở PR "Closes #12". Có thể cho agent này làm, agent kia xem lại (prompts.md P7).
 - Bạn review PR trên GitHub; agent sửa theo góp ý.
 - Đồng bộ: `git pull` trước khi bắt đầu, push nhánh khi xong. Không commit thẳng `main`.
 

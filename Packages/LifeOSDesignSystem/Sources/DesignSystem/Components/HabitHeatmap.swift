@@ -36,7 +36,8 @@ public struct HabitHeatmap: View {
         Canvas { context, _ in
             for (index, day) in days.enumerated() {
                 let rect = CGRect(x: CGFloat(index / 7) * step, y: CGFloat(index % 7) * step, width: cell, height: cell)
-                let style: GraphicsContext.Shading = day.level == 0
+                let style: GraphicsContext.Shading =
+                    day.level == 0
                     ? .color(LifeOSColor.surface2)
                     : .color(tint.opacity(0.25 + 0.1875 * Double(day.level)))
                 context.fill(Path(roundedRect: rect, cornerRadius: Radius.xs / 2, style: .continuous), with: style)

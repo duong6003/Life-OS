@@ -40,10 +40,13 @@ public struct WeekdayPicker: View {
     public var body: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: Layout.hit), spacing: Space.s2)], spacing: Space.s2) {
             ForEach(0..<7, id: \.self) { day in
-                Toggle(Self.labels[day], isOn: Binding(
-                    get: { selection.contains(day) },
-                    set: { isOn in if isOn { selection.insert(day) } else { selection.remove(day) } }
-                ))
+                Toggle(
+                    Self.labels[day],
+                    isOn: Binding(
+                        get: { selection.contains(day) },
+                        set: { isOn in if isOn { selection.insert(day) } else { selection.remove(day) } }
+                    )
+                )
                 .toggleStyle(ChipToggleStyle())
                 .accessibilityLabel(Self.spoken[day])
             }

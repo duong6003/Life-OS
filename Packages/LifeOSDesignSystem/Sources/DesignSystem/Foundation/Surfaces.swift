@@ -1,37 +1,37 @@
 import SwiftUI
 
-public extension EnvironmentValues {
+extension EnvironmentValues {
     /// Lớp bố cục hiện tại. Đặt một lần ở gốc app bằng `.lifeOSLayoutClassFromSystem()`.
-    @Entry var lifeOSLayoutClass: LayoutClass = .compact
+    @Entry public var lifeOSLayoutClass: LayoutClass = .compact
 }
 
-public extension View {
+extension View {
     /// Đọc size class (iOS) hoặc nền tảng (Mac) và ghi vào `lifeOSLayoutClass`.
-    func lifeOSLayoutClassFromSystem() -> some View {
+    public func lifeOSLayoutClassFromSystem() -> some View {
         modifier(LayoutClassModifier())
     }
 
     /// Thẻ: nền đục, bo lg, viền tóc chỉ ở Light. Không bóng, không kính.
-    func lifeOSCard(fill: Color = LifeOSColor.surface, padding: CGFloat? = nil) -> some View {
+    public func lifeOSCard(fill: Color = LifeOSColor.surface, padding: CGFloat? = nil) -> some View {
         modifier(CardModifier(fill: fill, padding: padding))
     }
 
     /// Ô nhập: nền surface-2. Khi lỗi thêm viền 2pt màu chữ chính, không dùng đỏ.
-    func lifeOSField(isInvalid: Bool = false) -> some View {
+    public func lifeOSField(isInvalid: Bool = false) -> some View {
         modifier(FieldModifier(isInvalid: isInvalid))
     }
 }
 
 struct LayoutClassModifier: ViewModifier {
     #if os(iOS)
-    @Environment(\.horizontalSizeClass) private var sizeClass
-    func body(content: Content) -> some View {
-        content.environment(\.lifeOSLayoutClass, sizeClass == .regular ? .regular : .compact)
-    }
+        @Environment(\.horizontalSizeClass) private var sizeClass
+        func body(content: Content) -> some View {
+            content.environment(\.lifeOSLayoutClass, sizeClass == .regular ? .regular : .compact)
+        }
     #else
-    func body(content: Content) -> some View {
-        content.environment(\.lifeOSLayoutClass, .mac)
-    }
+        func body(content: Content) -> some View {
+            content.environment(\.lifeOSLayoutClass, .mac)
+        }
     #endif
 }
 
@@ -86,7 +86,9 @@ public struct IconTile: View {
             .font(.system(size: 20, weight: .medium))
             .foregroundStyle(tint)
             .frame(width: 36, height: 36)
-            .background(tint.opacity(LifeOSOpacity.dataTint(scheme)), in: .rect(cornerRadius: Radius.sm, style: .continuous))
+            .background(
+                tint.opacity(LifeOSOpacity.dataTint(scheme)), in: .rect(cornerRadius: Radius.sm, style: .continuous)
+            )
             .accessibilityHidden(true)
     }
 }

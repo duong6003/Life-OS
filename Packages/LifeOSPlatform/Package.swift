@@ -13,14 +13,18 @@ let package = Package(
     dependencies: [.package(path: "../LifeOSCore")],
     targets: [
         .target(name: "CryptoApple", dependencies: [.product(name: "CryptoCore", package: "LifeOSCore")]),
-        .target(name: "CloudKitTransport", dependencies: [
-            .product(name: "SyncCore", package: "LifeOSCore"),
-            .product(name: "CryptoCore", package: "LifeOSCore"),
-        ]),
+        .target(
+            name: "CloudKitTransport",
+            dependencies: [
+                .product(name: "SyncCore", package: "LifeOSCore"),
+                .product(name: "CryptoCore", package: "LifeOSCore"),
+            ]),
         .target(name: "PlatformServices", dependencies: [.product(name: "Domain", package: "LifeOSCore")]),
-        .testTarget(name: "CryptoAppleTests", dependencies: [
-            "CryptoApple", .product(name: "TestSupport", package: "LifeOSCore"),
-        ]),
+        .testTarget(
+            name: "CryptoAppleTests",
+            dependencies: [
+                "CryptoApple", .product(name: "TestSupport", package: "LifeOSCore"),
+            ]),
     ],
     swiftLanguageModes: [.v6]
 )

@@ -16,8 +16,8 @@ let package = Package(
     targets: [
         .target(name: "Domain"),
         .target(name: "Capture", dependencies: ["Domain"]),
-        .target(name: "SyncCore", dependencies: ["Domain"]),      // sau MVP (ADR-0016, LOS-075)
-        .target(name: "CryptoCore", dependencies: ["Domain"]),    // sau MVP (ADR-0016, LOS-075)
+        .target(name: "SyncCore", dependencies: ["Domain"]),  // sau MVP (ADR-0016, LOS-075)
+        .target(name: "CryptoCore", dependencies: ["Domain"]),  // sau MVP (ADR-0016, LOS-075)
         .target(name: "TestSupport", dependencies: ["Domain", "SyncCore", "CryptoCore"]),
         .testTarget(name: "DomainTests", dependencies: ["Domain", "TestSupport"]),
         .testTarget(name: "CaptureTests", dependencies: ["Capture", "TestSupport"]),

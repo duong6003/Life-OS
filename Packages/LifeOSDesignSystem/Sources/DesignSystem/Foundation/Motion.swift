@@ -1,13 +1,15 @@
 import SwiftUI
 
-public extension View {
+extension View {
     /// Chuyển động token; tự đổi sang mờ dần ngắn khi bật Reduce Motion.
-    func lifeOSAnimation<V: Equatable>(_ token: MotionToken, value: V) -> some View {
+    public func lifeOSAnimation<V: Equatable>(_ token: MotionToken, value: V) -> some View {
         modifier(MotionModifier(token: token, value: value))
     }
 
     /// Rung khi `trigger` đổi. `condition` lọc bớt, ví dụ chỉ rung khi vừa bật.
-    func lifeOSHaptic<T: Equatable>(_ token: HapticToken, trigger: T, condition: @escaping (T, T) -> Bool = { _, _ in true }) -> some View {
+    public func lifeOSHaptic<T: Equatable>(
+        _ token: HapticToken, trigger: T, condition: @escaping (T, T) -> Bool = { _, _ in true }
+    ) -> some View {
         sensoryFeedback(token.feedback, trigger: trigger, condition: condition)
     }
 }
@@ -24,13 +26,15 @@ struct MotionModifier<V: Equatable>: ViewModifier {
 
 /// Dùng trong action: `withLifeOSAnimation(.standard, reduceMotion: reduceMotion) { … }`.
 @MainActor
-public func withLifeOSAnimation<Result>(_ token: MotionToken, reduceMotion: Bool, _ body: () throws -> Result) rethrows -> Result {
+public func withLifeOSAnimation<Result>(
+    _ token: MotionToken, reduceMotion: Bool, _ body: () throws -> Result
+) rethrows -> Result {
     try withAnimation(reduceMotion ? MotionToken.reduced : token.animation, body)
 }
 
-public extension AnyTransition {
+extension AnyTransition {
     /// Vào và ra: mờ dần + thu nhẹ; chỉ mờ dần khi Reduce Motion.
-    static func lifeOS(reduceMotion: Bool) -> AnyTransition {
+    public static func lifeOS(reduceMotion: Bool) -> AnyTransition {
         reduceMotion ? .opacity : .opacity.combined(with: .scale(scale: 0.96))
     }
 }

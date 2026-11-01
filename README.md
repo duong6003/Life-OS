@@ -25,7 +25,7 @@ Yêu cầu: Xcode 26.x trở lên (Swift 6.2+), macOS 26, Python 3.11+ (chỉ đ
 
 | Bạn là | Đọc |
 |---|---|
-| Người mới (hoặc agent) | [`CLAUDE.md`](CLAUDE.md) → [`docs/README.md`](docs/README.md) |
+| Người mới (hoặc agent: Codex, Claude Code…) | [`AGENTS.md`](AGENTS.md) → [`docs/agents/README.md`](docs/agents/README.md) → [`docs/README.md`](docs/README.md) |
 | Viết tính năng | [`docs/architecture/module-structure.md`](docs/architecture/module-structure.md), [`docs/engineering/conventions.md`](docs/engineering/conventions.md), [`docs/product/business-rules.md`](docs/product/business-rules.md) |
 | Đụng tới dữ liệu / đồng bộ / mã hoá | [`docs/architecture/data-model.md`](docs/architecture/data-model.md), [`docs/specs/SPEC-sync.md`](docs/specs/SPEC-sync.md), [`docs/specs/SPEC-crypto.md`](docs/specs/SPEC-crypto.md) |
 | Làm giao diện | [`docs/design/design-workflow.md`](docs/design/design-workflow.md), [`design/README.md`](design/README.md) |
@@ -35,7 +35,8 @@ Yêu cầu: Xcode 26.x trở lên (Swift 6.2+), macOS 26, Python 3.11+ (chỉ đ
 
 ```
 life-os/
-├── CLAUDE.md                 Luật cho agent code (đọc trước khi sửa gì)
+├── AGENTS.md                 Luật cho mọi agent code (chuẩn agents.md; đọc trước khi sửa gì)
+├── CLAUDE.md                 Chỉ import AGENTS.md cho Claude Code
 ├── App/                      Xcode project mỏng: chỉ @main, Info.plist, entitlements, asset icon
 ├── Packages/
 │   ├── LifeOSCore/           Swift thuần, build được trên Linux/Android: Domain, Capture, SyncCore, CryptoCore, Persistence

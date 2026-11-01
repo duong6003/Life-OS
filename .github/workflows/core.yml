@@ -21,6 +21,10 @@ jobs:
         run: python3 -I design/tokens/generate.py --check
       - name: Test vectors match reference (Python + TypeScript)
         run: python3 -I reference/run_all.py --check
+      - name: File placement and naming (ADR-0017)
+        run: python3 -I scripts/check_structure.py
+      - name: Inventory up to date
+        run: python3 -I scripts/inventory.py --check
       - name: Plan graph valid
         run: python3 -I scripts/plan_graph.py --check
 

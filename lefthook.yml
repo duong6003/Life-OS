@@ -18,6 +18,11 @@ pre-commit:
     tokens:
       glob: "design/tokens/*"
       run: python3 -I design/tokens/generate.py --check
+    structure:
+      run: python3 -I scripts/check_structure.py
+    inventory:
+      glob: "Packages/**/*.swift"
+      run: python3 -I scripts/inventory.py --check
     plan:
       glob: "docs/plan/issues/*.md"
       run: python3 -I scripts/plan_graph.py --check

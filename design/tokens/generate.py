@@ -46,7 +46,7 @@ for k, c in T['color'].items():
     files[os.path.join(xc, camel(k) + '.colorset', 'Contents.json')] = json.dumps({'colors': entries, 'info': {'author': 'xcode', 'version': 1}}, indent=2) + '\n'
 
 # ---- Swift
-L = ['// Sinh tự động từ design-tokens/tokens.json bởi design-tokens/generate.py. Đừng sửa tay.', '', 'import SwiftUI', '']
+L = ['// swift-format-ignore-file', '// Sinh tự động từ design-tokens/tokens.json bởi design-tokens/generate.py. Đừng sửa tay.', '// swift-format bỏ qua file này: tên token (s0_5…) theo tokens.json, và định dạng lại sẽ làm --check báo cũ.', '', 'import SwiftUI', '']
 L += ['/// Màu token. Mỗi màu là một colorset có biến thể Light, Dark và (nếu có) Increase Contrast,', '/// nên hệ thống tự đổi theo giao diện mà không cần rẽ nhánh lúc chạy.', 'public enum LifeOSColor {']
 for k, c in T['color'].items():
     L.append(f'    /// {c["usage"]}')

@@ -9,7 +9,8 @@ public struct HabitTile: View {
     let progress: Double
     @Binding var isDone: Bool
 
-    public init(name: String, detail: String, symbol: String, tint: Color, progress: Double = 0, isDone: Binding<Bool>) {
+    public init(name: String, detail: String, symbol: String, tint: Color, progress: Double = 0, isDone: Binding<Bool>)
+    {
         self.name = name
         self.detail = detail
         self.symbol = symbol

@@ -25,11 +25,11 @@ Lần đầu chạy, SwiftLint có thể báo lỗi ở code design system cũ, 
 
 ## 2. Luật riêng của Life OS trong `.swiftlint.yml`
 
-Các luật này lấy từ `CLAUDE.md` và ADR. Nhờ có chúng, agent bị chặn tự động thay vì phải chờ người review nhắc.
+Các luật này lấy từ `AGENTS.md` và ADR. Nhờ có chúng, agent bị chặn tự động thay vì phải chờ người review nhắc.
 
 | Luật | Cấm | Vì sao |
 |---|---|---|
-| `no_any_view` | `AnyView` | Hiệu năng, CLAUDE.md luật 9 |
+| `no_any_view` | `AnyView` | Hiệu năng, AGENTS.md luật 9 |
 | `no_try_force` | `try!` ngoài test | Lỗi phải có kiểu |
 | `no_repeat_forever`, `no_timeline_animation` | Animation chạy mãi | Pin, performance-budget.md |
 | `no_formatter_in_body` | `DateFormatter()`… tạo tại chỗ | Dùng `FormatterCache` |
@@ -72,9 +72,33 @@ Hai skill Concurrency và Testing cài theo README của từng repo, theo cùng
 
 Ba quy tắc khi dùng skill:
 1. **Đọc SKILL.md trước khi cài.** Skill là nội dung bên thứ ba, chạy với quyền của agent.
-2. **Khi skill nói khác `CLAUDE.md` hay ADR, repo thắng.** Ví dụ: skill gợi ý dùng `@FetchAll` trong View thì vẫn theo ADR-0016.
+2. **Khi skill nói khác `AGENTS.md` hay ADR, repo thắng.** Ví dụ: skill gợi ý dùng `@FetchAll` trong View thì vẫn theo ADR-0016.
 3. **Không commit skill vào repo.** Mỗi người tự cài. Danh sách skill được chọn nằm ở file này.
 
 ## 4. Để sau: SonarQube Cloud
 
 [Analyzer Swift mới](https://docs.sonarsource.com/sonarqube-cloud/analyzing-source-code/languages/swift) hỗ trợ Swift 6.2 và SwiftUI, có 22 luật SAST, bắt code trùng, và đặt cổng chất lượng trên PR. Miễn phí cho repo public. Thêm khi repo public hoặc trước beta (LOS-065), nếu muốn có quét bảo mật.
+
+## 5. MCP cho agent làm app (bật từ LOS-003)
+
+Từ LOS-001 đến LOS-002, agent chỉ cần `swift build` và `swift test` trên các gói, nên chưa cần MCP nào. Khi đã có xcodeproj (LOS-003), dùng hai cái sau:
+
+| | Xcode MCP có sẵn (Xcode 26.3+) | [XcodeBuildMCP](https://github.com/getsentry/XcodeBuildMCP) |
+|---|---|---|
+| Dùng cho | Chụp `#Preview` (RenderPreview), tra tài liệu Apple và WWDC, lỗi trong Issue navigator, build và test | Build và chạy trên simulator, chạm/vuốt/chụp màn hình app thật, LLDB, test |
+| Cần Xcode mở | Có | Không |
+| Chi phí | 0, đi kèm Xcode; khoảng 20 tool | Node hoặc Homebrew; khoảng 80 tool, nên chỉ bật nhóm `simulator` và `ui-automation` |
+| Rủi ro | Apple chưa có tài liệu chính thức, tên tool có thể đổi | Mặc định gửi telemetry lên Sentry: tắt đi |
+
+Cài:
+
+```sh
+# Xcode › Settings › Intelligence › Model Context Protocol › bật "Xcode Tools"
+claude mcp add --transport stdio xcode -s user -- xcrun mcpbridge
+claude mcp add XcodeBuildMCP -s user -e XCODEBUILDMCP_SENTRY_DISABLED=true -- npx -y xcodebuildmcp@latest mcp
+```
+
+Ai dùng việc nào:
+- Agent dùng `RenderPreview` để có ảnh Light, Dark và AX5 cho Definition of Done.
+- XcodeBuildMCP dùng để tự kiểm luồng UI trên simulator, ví dụ tick việc rồi bấm Hoàn tác.
+- Không dùng MCP để thay CI: lint, test và kiểm tra vẫn chạy trong lefthook và CI.

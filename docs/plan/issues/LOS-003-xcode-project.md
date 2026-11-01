@@ -13,10 +13,11 @@ Một target app iOS + iPadOS + macOS mỏng, gắn 4 gói local.
 ## Việc cần làm
 - [ ] Xcode → New Project → Multiplatform App, tên LifeOS, lưu vào App/
 - [ ] Deployment iOS 26.0 / macOS 26.0 (ADR-0010)
-- [ ] Thêm 4 local package, link AppFeature
+- [ ] Thêm 5 local package (Core, Data, Platform, DesignSystem, Features), link AppFeature
 - [ ] Capabilities: iCloud (CloudKit, container iCloud.<bundle-id>), App Groups (group.<bundle-id>), Keychain Sharing, Background Modes (remote notifications, processing)
 - [ ] LifeOSApp.swift chỉ gọi AppEnvironment.live() + RootView
 - [ ] Bật Swift 6 language mode, strict concurrency complete
+- [ ] Bật Xcode MCP và XcodeBuildMCP theo code-quality.md §5; thử agent build, chụp một #Preview và chạy app trên simulator
 
 ## Tiêu chí nghiệm thu
 - [ ] Chạy được trên iPhone simulator, iPad, Mac (màn trống)

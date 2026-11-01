@@ -12,14 +12,14 @@ Repo private trên GitHub có toàn bộ bộ khung, issue và milestone.
 
 ## Việc cần làm
 - [ ] Chép thư mục sang ~/Developer/life-os (decisions-open D11)
-- [ ] git init, commit đầu, push lên repo private
-- [ ] `python3 scripts/bootstrap_github.py --repo <user>/life-os --apply`
-- [ ] Bật branch protection cho main (cần PR + check `checks` và `core-swift`)
+- [x] git init, commit đầu, push lên repo (public: duong6003/Life-OS)
+- [x] `python3 scripts/bootstrap_github.py --repo <user>/life-os --apply`
+- [x] Bật branch protection cho main (cần PR + check `checks` và `core-swift`)
 
 ## Tiêu chí nghiệm thu
-- [ ] Repo có đủ thư mục như README
-- [ ] Có 7 milestone, đủ nhãn, ~45 issue có quan hệ blocked-by
-- [ ] `scripts/.issue-map.json` được commit
+- [x] Repo có đủ thư mục như README
+- [x] Có 7 milestone, đủ nhãn, ~45 issue có quan hệ blocked-by
+- [x] `scripts/.issue-map.json` được commit
 
 ## Tham chiếu
 - docs/engineering/workflow.md §1
